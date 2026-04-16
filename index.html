@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Les Amis de Marcel — Association de parents d'élèves de l'école Marcel Pagnol à Notre-Dame-des-Landes, section de l'Amicale Laïque." />
+  <title>Les Amis de Marcel — École Marcel Pagnol, Notre-Dame-des-Landes</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ======= Navigation ======= -->
+  <nav class="navbar" role="navigation" aria-label="Menu principal">
+    <div class="container">
+
+      <a href="#accueil" class="logo" aria-label="Les Amis de Marcel — Accueil">
+        <img src="https://github.com/user-attachments/assets/6d697ea5-410b-47c3-bab9-8ef658ee49b0"
+             alt="Les Amis de Marcel" class="logo-img" />
+        <div class="logo-text">
+          Les Amis de Marcel
+          <span>Amicale Laïque · Parents d'élèves</span>
+        </div>
+      </a>
+
+      <button class="nav-toggle" id="navToggle" aria-controls="navMenu" aria-expanded="false" aria-label="Ouvrir le menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <ul class="nav-menu" id="navMenu" role="list">
+        <li><a href="#accueil">Accueil</a></li>
+        <li><a href="#association">Association</a></li>
+        <li><a href="#agenda">Agenda</a></li>
+        <li><a href="#activites">Activités</a></li>
+        <li><a href="#fonds">Les fonds</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- ======= Hero ======= -->
+    <section class="hero" id="accueil" aria-label="Bienvenue">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="container hero-content">
+        <img src="https://github.com/user-attachments/assets/6d697ea5-410b-47c3-bab9-8ef658ee49b0"
+             alt="Les Amis de Marcel" class="hero-logo" />
+        <div class="hero-badge">École Marcel Pagnol · Notre-Dame-des-Landes</div>
+        <h1 class="hero-title">
+          Les Amis<br />de <em>Marcel</em>
+        </h1>
+        <p class="hero-description">
+          L'association de parents d'élèves de l'école Marcel Pagnol à Notre-Dame-des-Landes,
+          section de l'Amicale Laïque. Unis pour soutenir nos enfants et animer la vie scolaire.
+        </p>
+        <div class="hero-actions">
+          <a href="#association" class="btn btn-primary">Découvrir l'association</a>
+          <a href="#contact" class="btn btn-outline">Nous rejoindre</a>
+        </div>
+      </div>
+      <div class="hero-scroll" aria-hidden="true">Défiler</div>
+    </section>
+
+    <!-- ======= About ======= -->
+    <section class="about" id="association">
+      <div class="container">
+        <div class="about-grid">
+
+          <div class="about-visual fade-up">
+            <div class="about-image-wrap">
+              <span class="about-placeholder-icon" aria-hidden="true">🏫</span>
+            </div>
+            <div class="about-badge">
+              <strong>NDL</strong>
+              <small>Notre-Dame-des-Landes</small>
+            </div>
+          </div>
+
+          <div class="about-text fade-up">
+            <span class="section-tag">Notre association</span>
+            <h2 class="section-title">Une communauté de parents engagés pour l'école</h2>
+            <p class="section-subtitle">
+              Les Amis de Marcel sont les parents d'élèves de l'école Marcel Pagnol à Notre-Dame-des-Landes,
+              réunis au sein de la section locale de l'Amicale Laïque.
+            </p>
+            <p style="color:var(--color-muted); margin-bottom:1.5rem;">
+              Notre association soutient la vie scolaire en organisant des événements festifs,
+              des sorties et des collectes de fonds tout au long de l'année. Nous travaillons
+              main dans la main avec l'équipe enseignante pour offrir aux enfants des expériences
+              enrichissantes au-delà de la classe.
+            </p>
+            <div class="about-features">
+              <div class="about-feature">
+                <span class="about-feature-icon">🎉</span>
+                <span>Kermesse &amp; fêtes scolaires</span>
+              </div>
+              <div class="about-feature">
+                <span class="about-feature-icon">🤝</span>
+                <span>Communauté soudée de parents</span>
+              </div>
+              <div class="about-feature">
+                <span class="about-feature-icon">🌿</span>
+                <span>Sorties &amp; activités pour les enfants</span>
+              </div>
+              <div class="about-feature">
+                <span class="about-feature-icon">💛</span>
+                <span>Soutien aux projets de l'école</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ======= Events ======= -->
+    <section class="events" id="agenda">
+      <div class="container">
+        <div class="events-header">
+          <div>
+            <span class="section-tag">À venir</span>
+            <h2 class="section-title" style="margin-bottom:0">Prochains événements</h2>
+          </div>
+          <a href="https://nxtcld.lesamisdemarcel.fr/apps/calendar/p/yFFj9TrYN2R8oCkT"
+           class="btn btn-primary" target="_blank" rel="noopener"
+           title="Voir l'agenda complet sur Nextcloud">📅 Voir l'agenda complet</a>
+        </div>
+
+        <!-- Events are loaded dynamically from the Nextcloud Calendar iCal feed -->
+        <div class="events-list" id="eventsList">
+          <p class="events-empty" id="eventsEmpty" style="display:none">
+            Aucun événement à venir pour le moment. Revenez bientôt !
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======= Activities ======= -->
+    <section class="activities" id="activites">
+      <div class="container">
+        <div class="activities-header fade-up">
+          <span class="section-tag">Ce que nous faisons</span>
+          <h2 class="section-title">Nos activités</h2>
+          <p class="section-subtitle">
+            Tout au long de l'année scolaire, nous animons la vie de l'école et créons des moments
+            de partage pour les enfants et leurs familles.
+          </p>
+        </div>
+
+        <div class="activities-grid">
+
+          <article class="activity-card fade-up">
+            <div class="activity-icon" aria-hidden="true">🎉</div>
+            <h3>Kermesse &amp; Fêtes</h3>
+            <p>La grande fête annuelle de l'école avec stands, jeux et animations pour toute la famille. Un moment incontournable !</p>
+          </article>
+
+          <article class="activity-card fade-up">
+            <div class="activity-icon" aria-hidden="true">🎭</div>
+            <h3>Spectacles &amp; Animations</h3>
+            <p>Soirées spectacles, représentations et animations organisées pour les enfants et les familles de l'école.</p>
+          </article>
+
+          <article class="activity-card fade-up">
+            <div class="activity-icon" aria-hidden="true">🌿</div>
+            <h3>Sorties &amp; Découvertes</h3>
+            <p>Des sorties organisées pour enrichir l'expérience des enfants : nature, culture, sport et découverte.</p>
+          </article>
+
+          <article class="activity-card fade-up">
+            <div class="activity-icon" aria-hidden="true">🤝</div>
+            <h3>Collectes &amp; Solidarité</h3>
+            <p>Vide-greniers, tombolas et actions solidaires pour financer les projets et équipements de l'école.</p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ======= Fonds ======= -->
+    <section class="fonds" id="fonds">
+      <div class="container">
+
+        <div class="fonds-header fade-up">
+          <span class="section-tag">Notre impact</span>
+          <h2 class="section-title">Concrètement, <span>à quoi servent les fonds ?</span></h2>
+          <p class="section-subtitle">
+            Tout ce que nous organisons a un objectif simple : améliorer le quotidien des enfants à l'école.
+          </p>
+        </div>
+
+        <div class="fonds-pills fade-up">
+          <div class="fonds-pill"><span class="fonds-pill-icon">📚</span> Matériel scolaire</div>
+          <div class="fonds-pill"><span class="fonds-pill-icon">🚌</span> Sorties éducatives</div>
+          <div class="fonds-pill"><span class="fonds-pill-icon">🎨</span> Projets pédagogiques</div>
+          <div class="fonds-pill"><span class="fonds-pill-icon">⛺</span> Classes découvertes</div>
+        </div>
+
+        <div class="fonds-highlight fade-up">
+          <strong class="fonds-amount">+ de 5 000 €</strong>
+          <p class="fonds-label">reversés à l'école chaque année ✨</p>
+        </div>
+
+        <p class="fonds-footer fade-up">
+          Et derrière ces chiffres, il y a surtout des projets rendus possibles… et des souvenirs créés pour les enfants.
+        </p>
+
+      </div>
+    </section>
+
+    <!-- ======= Join / CTA ======= -->
+    <section class="join">
+      <div class="container">
+        <span class="section-tag" style="color:rgba(255,255,255,.6)">Adhésion</span>
+        <h2 class="section-title">Rejoignez les Amis de Marcel</h2>
+        <p class="section-subtitle">
+          Ouverte à tous les parents d'élèves de l'école Marcel Pagnol, notre association
+          accueille avec joie chaque nouvelle famille. Votre engagement, même ponctuel,
+          fait la différence pour nos enfants.
+        </p>
+        <div class="join-actions">
+          <a href="#contact" class="btn btn-primary">Nous rejoindre</a>
+          <a href="mailto:contact@lesamisdemarcel.fr" class="btn btn-outline">Nous écrire</a>
+        </div>
+        <blockquote class="join-quote">
+          « L'école, c'est la deuxième maison des enfants. Faisons-la belle ensemble. »
+          <cite>— Les Amis de Marcel</cite>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- ======= Contact ======= -->
+    <section class="contact" id="contact">
+      <div class="container">
+
+        <div class="contact-grid">
+
+          <div class="contact-info fade-up">
+            <span class="section-tag">Nous contacter</span>
+            <h2>Prenez contact avec nous</h2>
+            <p>Vous souhaitez rejoindre l'association, poser une question ou proposer une idée ? Nous sommes là !</p>
+
+            <div class="contact-items">
+              <div class="contact-item">
+                <div class="contact-item-icon" aria-hidden="true">📍</div>
+                <span>École Marcel Pagnol, Notre-Dame-des-Landes (44130)</span>
+              </div>
+              <div class="contact-item">
+                <div class="contact-item-icon" aria-hidden="true">✉️</div>
+                <a href="mailto:contact@lesamisdemarcel.fr">contact@lesamisdemarcel.fr</a>
+              </div>
+              <div class="contact-item">
+                <div class="contact-item-icon" aria-hidden="true">🏫</div>
+                <span>Section de l'Amicale Laïque de Notre-Dame-des-Landes</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-form fade-up">
+            <!-- Note: form submission requires server-side processing (e.g. PHP, Netlify Forms, Formspree). -->
+            <form action="#" method="post" novalidate>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="prenom">Prénom</label>
+                  <input type="text" id="prenom" name="prenom" placeholder="Votre prénom" autocomplete="given-name" required />
+                </div>
+                <div class="form-group">
+                  <label for="nom">Nom</label>
+                  <input type="text" id="nom" name="nom" placeholder="Votre nom" autocomplete="family-name" required />
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="email">Adresse e-mail</label>
+                <input type="email" id="email" name="email" placeholder="vous@exemple.fr" autocomplete="email" required />
+              </div>
+              <div class="form-group">
+                <label for="sujet">Sujet</label>
+                <select id="sujet" name="sujet">
+                  <option value="">— Choisissez un sujet —</option>
+                  <option value="adhesion">Adhésion à l'association</option>
+                  <option value="evenement">Informations sur un événement</option>
+                  <option value="partenariat">Partenariat / presse</option>
+                  <option value="autre">Autre demande</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" placeholder="Votre message…" required></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary" style="width:100%">Envoyer le message</button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======= Footer ======= -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+
+        <div class="footer-brand">
+          <a href="#accueil" class="logo" aria-label="Les Amis de Marcel">
+            <img src="https://github.com/user-attachments/assets/6d697ea5-410b-47c3-bab9-8ef658ee49b0"
+                 alt="Les Amis de Marcel" class="logo-img" />
+            <div class="logo-text">
+              Les Amis de Marcel
+              <span>Amicale Laïque · Parents d'élèves</span>
+            </div>
+          </a>
+          <p>Association de parents d'élèves de l'école Marcel Pagnol à Notre-Dame-des-Landes.</p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="#accueil">Accueil</a></li>
+            <li><a href="#association">Association</a></li>
+            <li><a href="#agenda">Agenda</a></li>
+            <li><a href="#activites">Activités</a></li>
+            <li><a href="#fonds">Les fonds</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Activités</h4>
+          <ul>
+            <li><a href="#activites">Kermesse &amp; Fêtes</a></li>
+            <li><a href="#activites">Spectacles &amp; Animations</a></li>
+            <li><a href="#activites">Sorties &amp; Découvertes</a></li>
+            <li><a href="#activites">Collectes &amp; Solidarité</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <ul>
+            <li><a href="mailto:contact@lesamisdemarcel.fr">contact@lesamisdemarcel.fr</a></li>
+            <li>École Marcel Pagnol<br />Notre-Dame-des-Landes (44130)</li>
+            <li><a href="https://nxtcld.lesamisdemarcel.fr/apps/calendar/p/yFFj9TrYN2R8oCkT" target="_blank" rel="noopener">📅 Agenda Nextcloud</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2025 Les Amis de Marcel — Tous droits réservés</span>
+        <span>Fait avec ❤️ à Notre-Dame-des-Landes</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ======= Scripts ======= -->
+  <script>
+    // Mark body as JS-ready so fade-up animations activate
+    document.body.classList.add('js-ready');
+
+    // Mobile nav toggle
+    const toggle = document.getElementById('navToggle');
+    const menu   = document.getElementById('navMenu');
+
+    toggle.addEventListener('click', () => {
+      const isOpen = menu.classList.toggle('open');
+      toggle.classList.toggle('open', isOpen);
+      toggle.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    // Close menu on link click
+    menu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        menu.classList.remove('open');
+        toggle.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    // Fade-up on scroll (IntersectionObserver)
+    const fadeEls = document.querySelectorAll('.fade-up');
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+
+      fadeEls.forEach(el => observer.observe(el));
+    } else {
+      fadeEls.forEach(el => el.classList.add('visible'));
+    }
+
+    // ---- Dynamic Events (Nextcloud Calendar iCal feed) ----
+    const ICAL_URL  = 'https://nxtcld.lesamisdemarcel.fr/remote.php/dav/public-calendars/yFFj9TrYN2R8oCkT?export';
+    const FR_MONTHS = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+
+    // Unfold iCal continuation lines (lines starting with space/tab are a continuation of the previous line)
+    function unfoldIcal(text) {
+      return text.replace(/\r\n[ \t]/g, '').replace(/\n[ \t]/g, '').replace(/\r\n/g, '\n');
+    }
+
+    // Decode iCal text escape sequences
+    function icalText(val) {
+      return String(val)
+        .replace(/\\n/gi, '\n')
+        .replace(/\\,/g, ',')
+        .replace(/\\;/g, ';')
+        .replace(/\\\\/g, '\\')
+        .trim();
+    }
+
+    // Extract property name (before first ';' or ':')
+    function icalPropName(line) {
+      const end = Math.min(
+        line.indexOf(':') >= 0 ? line.indexOf(':') : Infinity,
+        line.indexOf(';') >= 0 ? line.indexOf(';') : Infinity
+      );
+      return line.slice(0, end).toUpperCase();
+    }
+
+    // Extract property value (after first ':')
+    function icalPropValue(line) {
+      const idx = line.indexOf(':');
+      return idx >= 0 ? line.slice(idx + 1) : '';
+    }
+
+    // Parse a DTSTART line into a JS Date
+    function parseIcalDate(line) {
+      const val = icalPropValue(line).trim();
+      const y  = parseInt(val.slice(0, 4), 10);
+      const mo = parseInt(val.slice(4, 6), 10) - 1;
+      const d  = parseInt(val.slice(6, 8), 10);
+      if (val.length === 8 || val.indexOf('T') < 0) {
+        // DATE-only: treat as local midnight
+        return new Date(y, mo, d);
+      }
+      const h  = parseInt(val.slice(9, 11), 10);
+      const mi = parseInt(val.slice(11, 13), 10);
+      return val.endsWith('Z') ? new Date(Date.UTC(y, mo, d, h, mi)) : new Date(y, mo, d, h, mi);
+    }
+
+    // Parse iCal text and return an array of event objects
+    function parseIcal(text) {
+      const events = [];
+      const blocks = unfoldIcal(text).split('BEGIN:VEVENT');
+      blocks.shift(); // discard the VCALENDAR header
+      for (const block of blocks) {
+        const ev = {};
+        for (const line of block.split('\n')) {
+          const name = icalPropName(line);
+          const val  = icalPropValue(line);
+          if      (name === 'SUMMARY')     ev.title       = icalText(val);
+          else if (name === 'LOCATION')    ev.location    = icalText(val);
+          else if (name === 'DESCRIPTION') ev.description = icalText(val);
+          else if (name === 'CATEGORIES')  ev.category    = icalText(val).split(',')[0].trim();
+          else if (name === 'DTSTART')     { try { ev.date = parseIcalDate(line); } catch (e) { console.warn('iCal date invalide :', line, e); } }
+        }
+        if (ev.title && ev.date) events.push(ev);
+      }
+      return events;
+    }
+
+    function escHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    async function loadAndRenderEvents() {
+      const list  = document.getElementById('eventsList');
+      const empty = document.getElementById('eventsEmpty');
+
+      try {
+        const resp = await fetch(ICAL_URL);
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        const text = await resp.text();
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const events = parseIcal(text)
+          .filter(e => e.date >= today)
+          .sort((a, b) => a.date - b.date);
+
+        list.querySelectorAll('.event-card').forEach(el => el.remove());
+
+        if (events.length === 0) {
+          empty.style.display = 'block';
+          return;
+        }
+
+        empty.style.display = 'none';
+        events.forEach(ev => {
+          const day = String(ev.date.getDate()).padStart(2, '0');
+          const mon = FR_MONTHS[ev.date.getMonth()];
+
+          const article = document.createElement('article');
+          article.className = 'event-card fade-up visible';
+          article.innerHTML = `
+            <div class="event-date">
+              <strong>${day}</strong>
+              <span>${mon}</span>
+            </div>
+            <div class="event-info">
+              <h3>${escHtml(ev.title)}</h3>
+              ${ev.location    ? '<p>'                          + escHtml(ev.location)    + '</p>'    : ''}
+              ${ev.category    ? '<span class="event-tag">'    + escHtml(ev.category)    + '</span>' : ''}
+              ${ev.description ? '<p class="event-desc">'      + escHtml(ev.description) + '</p>'    : ''}
+            </div>`;
+          list.appendChild(article);
+        });
+      } catch (err) {
+        console.error('Erreur chargement calendrier :', err);
+        list.querySelectorAll('.event-card').forEach(el => el.remove());
+        empty.textContent = 'Impossible de charger les événements pour le moment.';
+        empty.style.display = 'block';
+      }
+    }
+
+    loadAndRenderEvents();
+  </script>
+
+</body>
+</html>
