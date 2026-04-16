@@ -404,7 +404,8 @@
     }
 
     // ---- Dynamic Events (Nextcloud Calendar iCal feed) ----
-    const ICAL_URL  = 'https://nxtcld.lesamisdemarcel.fr/remote.php/dav/public-calendars/yFFj9TrYN2R8oCkT?export';
+    const NEXTCLOUD_URL = 'https://nxtcld.lesamisdemarcel.fr/remote.php/dav/public-calendars/yFFj9TrYN2R8oCkT?export';
+    const ICAL_URL      = 'https://corsproxy.io/?' + encodeURIComponent(NEXTCLOUD_URL);
     const FR_MONTHS = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
 
     // Unfold iCal continuation lines (lines starting with space/tab are a continuation of the previous line)
