@@ -589,6 +589,20 @@ ul {
   margin-top: .4rem;
 }
 
+.event-desc {
+  color: var(--color-muted);
+  font-size: .85rem;
+  margin-top: .4rem;
+  font-style: italic;
+}
+
+.events-empty {
+  color: var(--color-muted);
+  font-style: italic;
+  padding: 2rem 0;
+  text-align: center;
+}
+
 /* ---- Join / CTA ---- */
 .join {
   padding: 5rem 0;
