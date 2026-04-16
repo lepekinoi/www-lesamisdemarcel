@@ -693,6 +693,13 @@ ul {
   text-align: center;
 }
 
+.events-loading {
+  color: var(--color-muted);
+  font-style: italic;
+  padding: 2rem 0;
+  text-align: center;
+}
+
 /* ---- Join / CTA ---- */
 .join {
   padding: 5rem 0;

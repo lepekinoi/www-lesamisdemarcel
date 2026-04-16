@@ -136,6 +136,7 @@
 
         <!-- Events are loaded dynamically from the Nextcloud Calendar iCal feed -->
         <div class="events-list" id="eventsList">
+          <p class="events-loading" id="eventsLoading">Chargement des événements…</p>
           <p class="events-empty" id="eventsEmpty" style="display:none">
             Aucun événement à venir pour le moment. Revenez bientôt !
           </p>
@@ -404,8 +405,28 @@
     }
 
     // ---- Dynamic Events (Nextcloud Calendar iCal feed) ----
-    const NEXTCLOUD_URL = 'https://nxtcld.lesamisdemarcel.fr/remote.php/dav/public-calendars/yFFj9TrYN2R8oCkT?export';
-    const ICAL_URL      = 'https://corsproxy.io/?' + encodeURIComponent(NEXTCLOUD_URL);
+    const NEXTCLOUD_ICAL = 'https://nxtcld.lesamisdemarcel.fr/remote.php/dav/public-calendars/yFFj9TrYN2R8oCkT?export';
+
+    // Multiple CORS proxies tried in order until one succeeds
+    const CORS_PROXIES = [
+      u => 'https://corsproxy.io/?' + encodeURIComponent(u),
+      u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u),
+    ];
+
+    async function fetchIcal(url) {
+      let lastError;
+      for (const makeProxy of CORS_PROXIES) {
+        try {
+          const resp = await fetch(makeProxy(url));
+          if (resp.ok) return await resp.text();
+          lastError = new Error('HTTP ' + resp.status);
+        } catch (e) {
+          lastError = e;
+        }
+      }
+      throw lastError;
+    }
+
     const FR_MONTHS = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
 
     // Unfold iCal continuation lines (lines starting with space/tab are a continuation of the previous line)
@@ -467,7 +488,8 @@
           else if (name === 'LOCATION')    ev.location    = icalText(val);
           else if (name === 'DESCRIPTION') ev.description = icalText(val);
           else if (name === 'CATEGORIES')  ev.category    = icalText(val).split(',')[0].trim();
-          else if (name === 'DTSTART')     { try { ev.date = parseIcalDate(line); } catch (e) { console.warn('iCal date invalide :', line, e); } }
+          else if (name === 'DTSTART')     { try { ev.date    = parseIcalDate(line); } catch (e) { console.warn('iCal date invalide :', line, e); } }
+          else if (name === 'DTEND')       { try { ev.dateEnd = parseIcalDate(line); } catch (e) { console.warn('iCal DTEND invalide :', line, e); } }
         }
         if (ev.title && ev.date) events.push(ev);
       }
@@ -483,19 +505,19 @@
     }
 
     async function loadAndRenderEvents() {
-      const list  = document.getElementById('eventsList');
-      const empty = document.getElementById('eventsEmpty');
+      const list    = document.getElementById('eventsList');
+      const empty   = document.getElementById('eventsEmpty');
+      const loading = document.getElementById('eventsLoading');
 
       try {
-        const resp = await fetch(ICAL_URL);
-        if (!resp.ok) throw new Error('HTTP ' + resp.status);
-        const text = await resp.text();
+        const text = await fetchIcal(NEXTCLOUD_ICAL);
+        loading.style.display = 'none';
 
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
         const events = parseIcal(text)
-          .filter(e => e.date >= today)
+          .filter(e => (e.dateEnd || e.date) >= today)
           .sort((a, b) => a.date - b.date);
 
         list.querySelectorAll('.event-card').forEach(el => el.remove());
@@ -527,6 +549,7 @@
         });
       } catch (err) {
         console.error('Erreur chargement calendrier :', err);
+        loading.style.display = 'none';
         list.querySelectorAll('.event-card').forEach(el => el.remove());
         empty.textContent = 'Impossible de charger les événements pour le moment.';
         empty.style.display = 'block';
