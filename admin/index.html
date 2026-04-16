@@ -352,8 +352,19 @@
     <main class="main-content">
       <p class="page-title">📅 Gestion des événements</p>
 
-      <!-- Add / Edit form -->
-      <div class="card">
+      <!-- Nextcloud Calendar notice -->
+      <div class="card" style="border-left:4px solid var(--success); background:#f0faf5;">
+        <h2 style="color:var(--success); border-color:#c3e6d5;">✅ Agenda géré via Nextcloud Calendar</h2>
+        <p style="margin-bottom:1rem;">
+          Les événements du site sont désormais chargés directement depuis l'agenda partagé Nextcloud.
+          Pour ajouter, modifier ou supprimer un événement, rendez-vous sur l'application Calendar de Nextcloud.
+        </p>
+        <a href="https://nxtcld.lesamisdemarcel.fr/apps/calendar" target="_blank" rel="noopener"
+           class="btn btn-success">🗓 Ouvrir Nextcloud Calendar</a>
+      </div>
+
+      <!-- Add / Edit form (legacy — no longer used) -->
+      <div class="card" style="opacity:.45; pointer-events:none; user-select:none;" aria-hidden="true">
         <h2 id="formTitle">➕ Ajouter un événement</h2>
         <form id="eventForm" novalidate>
           <input type="hidden" id="editId" />
@@ -409,8 +420,8 @@
         </form>
       </div>
 
-      <!-- Events list -->
-      <div class="card">
+      <!-- Events list (legacy) -->
+      <div class="card" style="opacity:.45; pointer-events:none; user-select:none;" aria-hidden="true">
         <h2>📋 Événements enregistrés</h2>
         <div id="adminEventsList">
           <p class="events-empty" id="adminEventsEmpty">Aucun événement pour le moment.</p>

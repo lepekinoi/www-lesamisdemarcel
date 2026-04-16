@@ -129,10 +129,12 @@
             <span class="section-tag">À venir</span>
             <h2 class="section-title" style="margin-bottom:0">Prochains événements</h2>
           </div>
-          <a href="admin/" class="btn btn-primary" title="Interface d'administration des événements">⚙ Gérer les événements</a>
+          <a href="https://nxtcld.lesamisdemarcel.fr/apps/calendar/p/yFFj9TrYN2R8oCkT"
+           class="btn btn-primary" target="_blank" rel="noopener"
+           title="Voir l'agenda complet sur Nextcloud">📅 Voir l'agenda complet</a>
         </div>
 
-        <!-- Events are injected dynamically by JavaScript (stored in localStorage) -->
+        <!-- Events are loaded dynamically from the Nextcloud Calendar iCal feed -->
         <div class="events-list" id="eventsList">
           <p class="events-empty" id="eventsEmpty" style="display:none">
             Aucun événement à venir pour le moment. Revenez bientôt !
@@ -347,7 +349,7 @@
           <ul>
             <li><a href="mailto:contact@lesamisdemarcel.fr">contact@lesamisdemarcel.fr</a></li>
             <li>École Marcel Pagnol<br />Notre-Dame-des-Landes (44130)</li>
-            <li><a href="admin/">⚙ Administration</a></li>
+            <li><a href="https://nxtcld.lesamisdemarcel.fr/apps/calendar/p/yFFj9TrYN2R8oCkT" target="_blank" rel="noopener">📅 Agenda Nextcloud</a></li>
           </ul>
         </div>
 
@@ -401,57 +403,74 @@
       fadeEls.forEach(el => el.classList.add('visible'));
     }
 
-    // ---- Dynamic Events (stored in localStorage) ----
-    const STORAGE_KEY = 'lam_events';
-    const FR_MONTHS   = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+    // ---- Dynamic Events (Nextcloud Calendar iCal feed) ----
+    const ICAL_URL  = 'https://nxtcld.lesamisdemarcel.fr/remote.php/dav/public-calendars/yFFj9TrYN2R8oCkT?export';
+    const FR_MONTHS = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
 
-    function loadEvents() {
-      try {
-        return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-      } catch {
-        return [];
-      }
+    // Unfold iCal continuation lines (lines starting with space/tab are a continuation of the previous line)
+    function unfoldIcal(text) {
+      return text.replace(/\r\n[ \t]/g, '').replace(/\n[ \t]/g, '').replace(/\r\n/g, '\n');
     }
 
-    function renderEvents() {
-      const list  = document.getElementById('eventsList');
-      const empty = document.getElementById('eventsEmpty');
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
+    // Decode iCal text escape sequences
+    function icalText(val) {
+      return String(val)
+        .replace(/\\n/gi, '\n')
+        .replace(/\\,/g, ',')
+        .replace(/\\;/g, ';')
+        .replace(/\\\\/g, '\\')
+        .trim();
+    }
 
-      const events = loadEvents()
-        .filter(e => new Date(e.date) >= today)
-        .sort((a, b) => new Date(a.date) - new Date(b.date));
+    // Extract property name (before first ';' or ':')
+    function icalPropName(line) {
+      const end = Math.min(
+        line.indexOf(':') >= 0 ? line.indexOf(':') : Infinity,
+        line.indexOf(';') >= 0 ? line.indexOf(';') : Infinity
+      );
+      return line.slice(0, end).toUpperCase();
+    }
 
-      // Remove old dynamic cards (keep the empty placeholder)
-      list.querySelectorAll('.event-card').forEach(el => el.remove());
+    // Extract property value (after first ':')
+    function icalPropValue(line) {
+      const idx = line.indexOf(':');
+      return idx >= 0 ? line.slice(idx + 1) : '';
+    }
 
-      if (events.length === 0) {
-        empty.style.display = 'block';
-        return;
+    // Parse a DTSTART line into a JS Date
+    function parseIcalDate(line) {
+      const val = icalPropValue(line).trim();
+      const y  = parseInt(val.slice(0, 4), 10);
+      const mo = parseInt(val.slice(4, 6), 10) - 1;
+      const d  = parseInt(val.slice(6, 8), 10);
+      if (val.length === 8 || val.indexOf('T') < 0) {
+        // DATE-only: treat as local midnight
+        return new Date(y, mo, d);
       }
+      const h  = parseInt(val.slice(9, 11), 10);
+      const mi = parseInt(val.slice(11, 13), 10);
+      return val.endsWith('Z') ? new Date(Date.UTC(y, mo, d, h, mi)) : new Date(y, mo, d, h, mi);
+    }
 
-      empty.style.display = 'none';
-      events.forEach(ev => {
-        const d   = new Date(ev.date);
-        const day = String(d.getUTCDate()).padStart(2, '0');
-        const mon = FR_MONTHS[d.getUTCMonth()];
-
-        const article = document.createElement('article');
-        article.className = 'event-card fade-up visible';
-        article.innerHTML = `
-          <div class="event-date">
-            <strong>${day}</strong>
-            <span>${mon}</span>
-          </div>
-          <div class="event-info">
-            <h3>${escHtml(ev.title)}</h3>
-            <p>${escHtml(ev.location)}${ev.time ? ' — ' + escHtml(ev.time) : ''}</p>
-            <span class="event-tag">${escHtml(ev.category)}</span>
-            ${ev.description ? '<p class="event-desc">' + escHtml(ev.description) + '</p>' : ''}
-          </div>`;
-        list.appendChild(article);
-      });
+    // Parse iCal text and return an array of event objects
+    function parseIcal(text) {
+      const events = [];
+      const blocks = unfoldIcal(text).split('BEGIN:VEVENT');
+      blocks.shift(); // discard the VCALENDAR header
+      for (const block of blocks) {
+        const ev = {};
+        for (const line of block.split('\n')) {
+          const name = icalPropName(line);
+          const val  = icalPropValue(line);
+          if      (name === 'SUMMARY')     ev.title       = icalText(val);
+          else if (name === 'LOCATION')    ev.location    = icalText(val);
+          else if (name === 'DESCRIPTION') ev.description = icalText(val);
+          else if (name === 'CATEGORIES')  ev.category    = icalText(val).split(',')[0].trim();
+          else if (name === 'DTSTART')     { try { ev.date = parseIcalDate(line); } catch {} }
+        }
+        if (ev.title && ev.date) events.push(ev);
+      }
+      return events;
     }
 
     function escHtml(str) {
@@ -462,7 +481,58 @@
         .replace(/"/g, '&quot;');
     }
 
-    renderEvents();
+    async function loadAndRenderEvents() {
+      const list  = document.getElementById('eventsList');
+      const empty = document.getElementById('eventsEmpty');
+
+      try {
+        const resp = await fetch(ICAL_URL);
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        const text = await resp.text();
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const events = parseIcal(text)
+          .filter(e => e.date >= today)
+          .sort((a, b) => a.date - b.date);
+
+        list.querySelectorAll('.event-card').forEach(el => el.remove());
+
+        if (events.length === 0) {
+          empty.style.display = 'block';
+          return;
+        }
+
+        empty.style.display = 'none';
+        events.forEach(ev => {
+          const day = String(ev.date.getDate()).padStart(2, '0');
+          const mon = FR_MONTHS[ev.date.getMonth()];
+
+          const article = document.createElement('article');
+          article.className = 'event-card fade-up visible';
+          article.innerHTML = `
+            <div class="event-date">
+              <strong>${day}</strong>
+              <span>${mon}</span>
+            </div>
+            <div class="event-info">
+              <h3>${escHtml(ev.title)}</h3>
+              ${ev.location    ? '<p>'                          + escHtml(ev.location)    + '</p>'    : ''}
+              ${ev.category    ? '<span class="event-tag">'    + escHtml(ev.category)    + '</span>' : ''}
+              ${ev.description ? '<p class="event-desc">'      + escHtml(ev.description) + '</p>'    : ''}
+            </div>`;
+          list.appendChild(article);
+        });
+      } catch (err) {
+        console.error('Erreur chargement calendrier :', err);
+        list.querySelectorAll('.event-card').forEach(el => el.remove());
+        empty.textContent = 'Impossible de charger les événements pour le moment.';
+        empty.style.display = 'block';
+      }
+    }
+
+    loadAndRenderEvents();
   </script>
 
 </body>
