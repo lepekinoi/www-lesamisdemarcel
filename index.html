@@ -466,7 +466,7 @@
           else if (name === 'LOCATION')    ev.location    = icalText(val);
           else if (name === 'DESCRIPTION') ev.description = icalText(val);
           else if (name === 'CATEGORIES')  ev.category    = icalText(val).split(',')[0].trim();
-          else if (name === 'DTSTART')     { try { ev.date = parseIcalDate(line); } catch {} }
+          else if (name === 'DTSTART')     { try { ev.date = parseIcalDate(line); } catch (e) { console.warn('iCal date invalide :', line, e); } }
         }
         if (ev.title && ev.date) events.push(ev);
       }
