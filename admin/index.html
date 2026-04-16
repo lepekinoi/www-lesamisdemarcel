@@ -53,17 +53,11 @@
       text-align: center;
     }
 
-    .login-logo {
-      width: 56px;
-      height: 56px;
-      background: var(--primary);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      color: var(--white);
+    .login-logo-img {
+      height: 90px;
+      width: auto;
       margin: 0 auto 1.2rem;
+      display: block;
     }
 
     .login-card h1 {
@@ -108,15 +102,9 @@
       font-weight: 700;
     }
 
-    .admin-header-brand .badge {
-      background: var(--primary);
-      border-radius: 50%;
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: .9rem;
+    .admin-header-logo {
+      height: 36px;
+      width: auto;
     }
 
     .admin-header-actions {
@@ -326,7 +314,8 @@
   <!-- ======= Login Screen ======= -->
   <div class="login-screen" id="loginScreen">
     <div class="login-card">
-      <div class="login-logo" aria-hidden="true">M</div>
+      <img src="https://github.com/user-attachments/assets/6d697ea5-410b-47c3-bab9-8ef658ee49b0"
+           alt="Les Amis de Marcel" class="login-logo-img" />
       <h1>Les Amis de Marcel</h1>
       <p>Interface d'administration des événements</p>
       <form id="loginForm">
@@ -350,7 +339,8 @@
 
     <header class="admin-header">
       <div class="admin-header-brand">
-        <div class="badge" aria-hidden="true">M</div>
+        <img src="https://github.com/user-attachments/assets/6d697ea5-410b-47c3-bab9-8ef658ee49b0"
+             alt="" class="admin-header-logo" aria-hidden="true" />
         Les Amis de Marcel — Administration
       </div>
       <div class="admin-header-actions">

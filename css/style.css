@@ -11,13 +11,13 @@
 }
 
 :root {
-  --color-primary:   #2c5f8a;
-  --color-secondary: #e8a84c;
-  --color-accent:    #d94f3b;
-  --color-bg:        #faf9f7;
-  --color-dark:      #1a1a2e;
-  --color-text:      #3d3d3d;
-  --color-muted:     #7a7a7a;
+  --color-primary:   #2563a8;
+  --color-secondary: #f59e2e;
+  --color-accent:    #f97316;
+  --color-bg:        #fdf8f3;
+  --color-dark:      #1e1b18;
+  --color-text:      #3d3530;
+  --color-muted:     #8a7f76;
   --color-white:     #ffffff;
 
   --font-heading: 'Playfair Display', Georgia, 'Times New Roman', serif;
@@ -152,16 +152,11 @@ ul {
   gap: .55rem;
 }
 
-.logo-icon {
-  width: 38px;
-  height: 38px;
-  background: var(--color-primary);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-white);
-  font-size: 1.1rem;
+.logo-img {
+  height: 48px;
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .logo-text {
@@ -267,16 +262,15 @@ ul {
   align-items: center;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #1a3a5c 0%, #2c5f8a 50%, #1e4a6e 100%);
+  background: linear-gradient(135deg, #1a3558 0%, #2563a8 50%, #1a4a82 100%);
   padding: 7rem 0 4rem;
 }
 
 .hero-bg {
   position: absolute;
   inset: 0;
-  background-image:
-    radial-gradient(circle at 20% 80%, rgba(232,168,76,.15) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(44,95,138,.3) 0%, transparent 50%);
+  background: radial-gradient(circle at 20% 80%, rgba(249,115,22,.18) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(245,158,46,.15) 0%, transparent 50%);
   pointer-events: none;
 }
 
@@ -284,6 +278,19 @@ ul {
   position: relative;
   z-index: 1;
   text-align: center;
+}
+
+.hero-logo {
+  height: 160px;
+  width: auto;
+  margin: 0 auto 1.5rem;
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,.35));
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
 }
 
 .hero-badge {
@@ -379,7 +386,7 @@ ul {
   overflow: hidden;
   box-shadow: var(--shadow-lg);
   aspect-ratio: 4/3;
-  background: linear-gradient(135deg, #2c5f8a, #1a3a5c);
+  background: linear-gradient(135deg, #2563a8, #1a3558);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -445,7 +452,7 @@ ul {
 /* ---- Activities ---- */
 .activities {
   padding: 5rem 0;
-  background: linear-gradient(180deg, #f0f5fa 0%, var(--color-bg) 100%);
+  background: linear-gradient(180deg, #fef3e8 0%, var(--color-bg) 100%);
 }
 
 .activities-header {
@@ -504,6 +511,89 @@ ul {
 
 @media (min-width: 900px) {
   .activities-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* ---- Fonds ---- */
+.fonds {
+  padding: 5rem 0;
+  background: #f5f1eb;
+}
+
+.fonds-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.fonds-header .section-title {
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+}
+
+.fonds-header .section-title span {
+  color: var(--color-primary);
+}
+
+.fonds-header .section-subtitle {
+  margin: .5rem auto 0;
+  max-width: 520px;
+}
+
+.fonds-pills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .75rem;
+  margin-bottom: 2.5rem;
+}
+
+.fonds-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  background: rgba(255,255,255,.85);
+  border: 1.5px solid #e2d9ce;
+  border-radius: 50px;
+  padding: .55rem 1.2rem;
+  font-size: .92rem;
+  font-weight: 600;
+  color: var(--color-dark);
+  box-shadow: var(--shadow-sm);
+}
+
+.fonds-pill-icon {
+  font-size: 1.1rem;
+}
+
+.fonds-highlight {
+  max-width: 520px;
+  margin: 0 auto 2rem;
+  background: linear-gradient(135deg, #f97316 0%, #f43f5e 100%);
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  box-shadow: 0 12px 40px rgba(249,115,22,.3);
+}
+
+.fonds-amount {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: clamp(2.4rem, 7vw, 3.5rem);
+  font-weight: 700;
+  color: var(--color-white);
+  line-height: 1.1;
+  margin-bottom: .5rem;
+}
+
+.fonds-label {
+  font-size: 1rem;
+  color: rgba(255,255,255,.9);
+}
+
+.fonds-footer {
+  text-align: center;
+  color: var(--color-muted);
+  font-size: .95rem;
+  max-width: 480px;
+  margin: 0 auto;
 }
 
 /* ---- Events ---- */
@@ -606,7 +696,7 @@ ul {
 /* ---- Join / CTA ---- */
 .join {
   padding: 5rem 0;
-  background: linear-gradient(135deg, #1a3a5c 0%, #2c5f8a 100%);
+  background: linear-gradient(135deg, #1a3558 0%, #2563a8 100%);
   text-align: center;
   position: relative;
   overflow: hidden;
