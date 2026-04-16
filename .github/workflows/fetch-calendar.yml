@@ -1,0 +1,29 @@
+name: Mise à jour agenda
+
+on:
+  schedule:
+    - cron: '0 * * * *'   # toutes les heures
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Récupération du flux iCal Nextcloud
+        run: |
+          curl -fsSL \
+            "https://nxtcld.lesamisdemarcel.fr/remote.php/dav/public-calendars/yFFj9TrYN2R8oCkT?export" \
+            -o calendar.ics
+
+      - name: Commit si modifié
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add calendar.ics
+          git diff --staged --quiet || (git commit -m "chore: mise à jour agenda [skip ci]" && git push)

@@ -134,7 +134,7 @@
            title="Voir l'agenda complet sur Nextcloud">📅 Voir l'agenda complet</a>
         </div>
 
-        <!-- Events are loaded dynamically from the Nextcloud Calendar iCal feed -->
+        <!-- Events are loaded dynamically from calendar.ics (fetched from Nextcloud by GitHub Actions) -->
         <div class="events-list" id="eventsList">
           <p class="events-empty" id="eventsEmpty" style="display:none">
             Aucun événement à venir pour le moment. Revenez bientôt !
@@ -404,7 +404,7 @@
     }
 
     // ---- Dynamic Events (Nextcloud Calendar iCal feed) ----
-    const ICAL_URL  = 'https://nxtcld.lesamisdemarcel.fr/remote.php/dav/public-calendars/yFFj9TrYN2R8oCkT?export';
+    const ICAL_URL  = './calendar.ics';
     const FR_MONTHS = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
 
     // Unfold iCal continuation lines (lines starting with space/tab are a continuation of the previous line)
