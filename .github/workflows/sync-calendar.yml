@@ -29,6 +29,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to calendar.ics"
           else
-            git commit -m "chore: sync calendar.ics [skip ci]"
+            git commit -m "chore: sync calendar.ics"
             git push
           fi
