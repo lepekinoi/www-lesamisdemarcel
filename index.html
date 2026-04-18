@@ -591,6 +591,8 @@
     }
 
     // ---- Dynamic Events (Nextcloud Calendar iCal feed) ----
+    // calendar.ics is kept up-to-date by a GitHub Actions workflow (same-origin, no CORS)
+    const LOCAL_ICAL  = 'calendar.ics';
     const NEXTCLOUD_ICAL = 'https://nxtcld.lesamisdemarcel.fr/remote.php/dav/public-calendars/yFFj9TrYN2R8oCkT?export';
     const CACHE_KEY = 'lam_ical_cache';
     const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
@@ -609,18 +611,24 @@
       return fetch(url, { signal: controller.signal }).finally(() => clearTimeout(id));
     }
 
-    async function fetchIcal(url) {
-      // Try direct fetch first (works when Nextcloud has CORS headers)
+    async function fetchIcal() {
+      // 1. Try the local copy first (same-origin, no CORS, kept fresh by CI)
       try {
-        const resp = await fetchWithTimeout(url, 8000);
+        const resp = await fetchWithTimeout(LOCAL_ICAL, 5000);
+        if (resp.ok) return await resp.text();
+      } catch (_) { /* file not yet present — fall through */ }
+
+      // 2. Try the Nextcloud URL directly (works if it has CORS headers)
+      try {
+        const resp = await fetchWithTimeout(NEXTCLOUD_ICAL, 8000);
         if (resp.ok) return await resp.text();
       } catch (_) { /* CORS or network error — fall through to proxies */ }
 
-      // Fall back to CORS proxies one by one
+      // 3. Fall back to CORS proxies one by one
       let lastError;
       for (const makeProxy of CORS_PROXIES) {
         try {
-          const resp = await fetchWithTimeout(makeProxy(url), 8000);
+          const resp = await fetchWithTimeout(makeProxy(NEXTCLOUD_ICAL), 8000);
           if (resp.ok) return await resp.text();
           lastError = new Error('HTTP ' + resp.status);
         } catch (e) {
@@ -848,7 +856,7 @@
 
       // Fetch fresh data (in background when cache was available)
       try {
-        const text = await fetchIcal(NEXTCLOUD_ICAL);
+        const text = await fetchIcal();
         setCachedIcal(text);
 
         const today = new Date();

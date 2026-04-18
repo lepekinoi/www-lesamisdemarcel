@@ -227,6 +227,7 @@ ul {
   font-weight: 600;
   font-size: .95rem;
   color: var(--color-dark);
+  white-space: nowrap;
   transition: color var(--transition), background var(--transition);
 }
 
