@@ -143,51 +143,6 @@
       border-bottom: 2px solid var(--bg);
     }
 
-    /* ---- Form ---- */
-    .form-grid {
-      display: grid;
-      gap: 1rem;
-    }
-
-    .form-row-2 { grid-template-columns: 1fr 1fr; }
-    .form-row-3 { grid-template-columns: 1fr 1fr 1fr; }
-
-    @media (max-width: 600px) {
-      .form-row-2, .form-row-3 { grid-template-columns: 1fr; }
-    }
-
-    .form-group label {
-      display: block;
-      font-size: .82rem;
-      font-weight: 700;
-      color: var(--dark);
-      margin-bottom: .35rem;
-    }
-
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      width: 100%;
-      padding: .65rem .9rem;
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: .93rem;
-      color: var(--text);
-      background: #fafbfc;
-      outline: none;
-      transition: border-color .2s, box-shadow .2s;
-    }
-
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(44,95,138,.1);
-    }
-
-    .form-group textarea { resize: vertical; min-height: 80px; }
-
     /* ---- Buttons ---- */
     .btn {
       display: inline-flex;
@@ -206,107 +161,9 @@
     .btn:active { transform: none; }
 
     .btn-primary  { background: var(--primary);   color: var(--white); }
-    .btn-secondary{ background: var(--secondary); color: var(--dark);  }
-    .btn-danger   { background: var(--danger);    color: var(--white); }
     .btn-success  { background: var(--success);   color: var(--white); }
     .btn-ghost    { background: transparent; border: 1.5px solid var(--border); color: var(--text); }
     .btn-sm       { padding: .35rem .85rem; font-size: .8rem; }
-
-    .form-actions {
-      display: flex;
-      gap: .75rem;
-      flex-wrap: wrap;
-      margin-top: 1.25rem;
-    }
-
-    /* ---- Events table ---- */
-    .events-empty {
-      color: var(--muted);
-      font-style: italic;
-      padding: 1.5rem 0;
-      text-align: center;
-    }
-
-    .event-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-      padding: 1rem 0;
-      border-bottom: 1px solid var(--bg);
-    }
-
-    .event-item:last-child { border-bottom: none; }
-
-    .event-item-date {
-      flex-shrink: 0;
-      background: var(--primary);
-      color: var(--white);
-      border-radius: 8px;
-      padding: .4rem .7rem;
-      text-align: center;
-      min-width: 50px;
-      font-size: .85rem;
-    }
-
-    .event-item-date strong {
-      display: block;
-      font-size: 1.3rem;
-      line-height: 1;
-    }
-
-    .event-item-body { flex: 1; min-width: 0; }
-
-    .event-item-title {
-      font-weight: 700;
-      color: var(--dark);
-      font-size: .95rem;
-    }
-
-    .event-item-meta {
-      color: var(--muted);
-      font-size: .82rem;
-      margin-top: .15rem;
-    }
-
-    .event-tag {
-      display: inline-block;
-      background: #eef4fb;
-      color: var(--primary);
-      font-size: .7rem;
-      font-weight: 700;
-      letter-spacing: .07em;
-      text-transform: uppercase;
-      padding: .1rem .45rem;
-      border-radius: 4px;
-      margin-top: .3rem;
-    }
-
-    .event-item-actions {
-      flex-shrink: 0;
-      display: flex;
-      gap: .4rem;
-    }
-
-    /* ---- Toast notification ---- */
-    .toast {
-      position: fixed;
-      bottom: 1.5rem;
-      right: 1.5rem;
-      background: var(--dark);
-      color: var(--white);
-      padding: .75rem 1.25rem;
-      border-radius: 8px;
-      font-size: .88rem;
-      font-weight: 600;
-      box-shadow: 0 4px 20px rgba(0,0,0,.3);
-      transform: translateY(120%);
-      transition: transform .3s ease;
-      z-index: 999;
-      max-width: 320px;
-    }
-    .toast.show { transform: none; }
-    .toast.toast-success { border-left: 4px solid var(--success); }
-    .toast.toast-error   { border-left: 4px solid var(--danger);  }
   </style>
 </head>
 <body>
@@ -363,108 +220,21 @@
            class="btn btn-success">🗓 Ouvrir Nextcloud Calendar</a>
       </div>
 
-      <!-- Add / Edit form (legacy — no longer used) -->
-      <div class="card" style="opacity:.45; pointer-events:none; user-select:none;">
-        <h2 id="formTitle">➕ Ajouter un événement</h2>
-        <form id="eventForm" novalidate>
-          <input type="hidden" id="editId" />
-
-          <div class="form-grid form-row-2">
-            <div class="form-group">
-              <label for="evDate">Date <span style="color:var(--danger)">*</span></label>
-              <input type="date" id="evDate" required />
-            </div>
-            <div class="form-group">
-              <label for="evTime">Heure (optionnel)</label>
-              <input type="time" id="evTime" placeholder="ex: 18h30" />
-            </div>
-          </div>
-
-          <div class="form-grid" style="margin-top:1rem;">
-            <div class="form-group">
-              <label for="evTitle">Titre <span style="color:var(--danger)">*</span></label>
-              <input type="text" id="evTitle" placeholder="ex : Kermesse de l'école" required />
-            </div>
-          </div>
-
-          <div class="form-grid form-row-2" style="margin-top:1rem;">
-            <div class="form-group">
-              <label for="evLocation">Lieu <span style="color:var(--danger)">*</span></label>
-              <input type="text" id="evLocation" placeholder="ex : École Marcel Pagnol" required />
-            </div>
-            <div class="form-group">
-              <label for="evCategory">Catégorie <span style="color:var(--danger)">*</span></label>
-              <select id="evCategory" required>
-                <option value="">— Choisir —</option>
-                <option value="Kermesse">Kermesse</option>
-                <option value="Spectacle">Spectacle</option>
-                <option value="Sortie">Sortie</option>
-                <option value="Collecte">Collecte</option>
-                <option value="Réunion">Réunion</option>
-                <option value="Autre">Autre</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-grid" style="margin-top:1rem;">
-            <div class="form-group">
-              <label for="evDesc">Description (optionnelle)</label>
-              <textarea id="evDesc" placeholder="Informations complémentaires…"></textarea>
-            </div>
-          </div>
-
-          <div class="form-actions">
-            <button type="submit" class="btn btn-success" id="saveBtn">✔ Enregistrer</button>
-            <button type="button" class="btn btn-ghost" id="cancelEditBtn" style="display:none">Annuler</button>
-          </div>
-        </form>
-      </div>
-
-      <!-- Events list (legacy) -->
-      <div class="card" style="opacity:.45; pointer-events:none; user-select:none;">
-        <h2>📋 Événements enregistrés</h2>
-        <div id="adminEventsList">
-          <p class="events-empty" id="adminEventsEmpty">Aucun événement pour le moment.</p>
-        </div>
-      </div>
-
     </main>
   </div>
 
-  <!-- Toast -->
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
     // ---- Configuration ----
-    // To change the password, edit the value below.
     const ADMIN_PASSWORD = 'amisdemarcel';
-    const STORAGE_KEY    = 'lam_events';
     const SESSION_KEY    = 'lam_admin_session';
-    const FR_MONTHS      = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
-
-    // ---- State ----
-    let editingId = null;
 
     // ---- Elements ----
-    const loginScreen  = document.getElementById('loginScreen');
-    const adminShell   = document.getElementById('adminShell');
-    const loginForm    = document.getElementById('loginForm');
-    const loginError   = document.getElementById('loginError');
-    const logoutBtn    = document.getElementById('logoutBtn');
-    const eventForm    = document.getElementById('eventForm');
-    const formTitle    = document.getElementById('formTitle');
-    const saveBtn      = document.getElementById('saveBtn');
-    const cancelEditBtn= document.getElementById('cancelEditBtn');
-    const evDate       = document.getElementById('evDate');
-    const evTime       = document.getElementById('evTime');
-    const evTitle      = document.getElementById('evTitle');
-    const evLocation   = document.getElementById('evLocation');
-    const evCategory   = document.getElementById('evCategory');
-    const evDesc       = document.getElementById('evDesc');
-    const editId       = document.getElementById('editId');
-    const eventsListEl = document.getElementById('adminEventsList');
-    const emptyMsg     = document.getElementById('adminEventsEmpty');
-    const toast        = document.getElementById('toast');
+    const loginScreen = document.getElementById('loginScreen');
+    const adminShell  = document.getElementById('adminShell');
+    const loginForm   = document.getElementById('loginForm');
+    const loginError  = document.getElementById('loginError');
+    const logoutBtn   = document.getElementById('logoutBtn');
 
     // ---- Session ----
     function isLoggedIn() {
@@ -474,7 +244,6 @@
     function showAdmin() {
       loginScreen.style.display = 'none';
       adminShell.classList.add('visible');
-      renderAdminList();
     }
 
     function showLogin() {
@@ -482,10 +251,7 @@
       loginScreen.style.display = '';
     }
 
-    // Boot
-    if (isLoggedIn()) {
-      showAdmin();
-    }
+    if (isLoggedIn()) { showAdmin(); }
 
     loginForm.addEventListener('submit', e => {
       e.preventDefault();
@@ -505,165 +271,6 @@
       sessionStorage.removeItem(SESSION_KEY);
       showLogin();
     });
-
-    // ---- Storage helpers ----
-    function loadEvents() {
-      try {
-        return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-      } catch {
-        return [];
-      }
-    }
-
-    function saveEvents(events) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
-    }
-
-    // ---- Toast ----
-    let toastTimer;
-    function showToast(msg, type = 'success') {
-      clearTimeout(toastTimer);
-      toast.textContent = msg;
-      toast.className = `toast toast-${type} show`;
-      toastTimer = setTimeout(() => { toast.classList.remove('show'); }, 3000);
-    }
-
-    // ---- Render admin list ----
-    function renderAdminList() {
-      const events = loadEvents().sort((a, b) => new Date(a.date) - new Date(b.date));
-      eventsListEl.querySelectorAll('.event-item').forEach(el => el.remove());
-
-      emptyMsg.style.display = events.length === 0 ? 'block' : 'none';
-
-      events.forEach(ev => {
-        const d   = new Date(ev.date);
-        const day = String(d.getUTCDate()).padStart(2, '0');
-        const mon = FR_MONTHS[d.getUTCMonth()];
-
-        const item = document.createElement('div');
-        item.className = 'event-item';
-        item.dataset.id = ev.id;
-        item.innerHTML = `
-          <div class="event-item-date">
-            <strong>${escHtml(day)}</strong>
-            <span>${escHtml(mon)}</span>
-          </div>
-          <div class="event-item-body">
-            <div class="event-item-title">${escHtml(ev.title)}</div>
-            <div class="event-item-meta">
-              📍 ${escHtml(ev.location)}${ev.time ? ' · ⏰ ' + escHtml(ev.time) : ''}
-            </div>
-            <span class="event-tag">${escHtml(ev.category)}</span>
-            ${ev.description ? '<div class="event-item-meta" style="margin-top:.3rem;font-style:italic">' + escHtml(ev.description) + '</div>' : ''}
-          </div>
-          <div class="event-item-actions">
-            <button class="btn btn-primary btn-sm edit-btn" data-id="${escHtml(ev.id)}" title="Modifier">✏</button>
-            <button class="btn btn-danger btn-sm delete-btn" data-id="${escHtml(ev.id)}" title="Supprimer">🗑</button>
-          </div>`;
-        eventsListEl.appendChild(item);
-      });
-
-      // Attach action handlers
-      eventsListEl.querySelectorAll('.edit-btn').forEach(btn => {
-        btn.addEventListener('click', () => startEdit(btn.dataset.id));
-      });
-      eventsListEl.querySelectorAll('.delete-btn').forEach(btn => {
-        btn.addEventListener('click', () => deleteEvent(btn.dataset.id));
-      });
-    }
-
-    // ---- Form submit ----
-    eventForm.addEventListener('submit', e => {
-      e.preventDefault();
-
-      if (!evDate.value || !evTitle.value.trim() || !evLocation.value.trim() || !evCategory.value) {
-        showToast('Veuillez remplir tous les champs obligatoires.', 'error');
-        return;
-      }
-
-      const events = loadEvents();
-
-      if (editingId) {
-        // Update existing
-        const idx = events.findIndex(ev => ev.id === editingId);
-        if (idx !== -1) {
-          events[idx] = buildEvent(editingId);
-          showToast('Événement mis à jour ✔');
-        }
-        stopEdit();
-      } else {
-        // Add new
-        events.push(buildEvent(String(Date.now())));
-        showToast('Événement ajouté ✔');
-      }
-
-      saveEvents(events);
-      renderAdminList();
-      eventForm.reset();
-    });
-
-    function buildEvent(id) {
-      return {
-        id,
-        date:        evDate.value,
-        time:        evTime.value || '',
-        title:       evTitle.value.trim(),
-        location:    evLocation.value.trim(),
-        category:    evCategory.value,
-        description: evDesc.value.trim(),
-      };
-    }
-
-    // ---- Edit ----
-    function startEdit(id) {
-      const ev = loadEvents().find(e => e.id === id);
-      if (!ev) return;
-
-      editingId = id;
-      editId.value = id;
-      evDate.value     = ev.date;
-      evTime.value     = ev.time || '';
-      evTitle.value    = ev.title;
-      evLocation.value = ev.location;
-      evCategory.value = ev.category;
-      evDesc.value     = ev.description || '';
-
-      formTitle.textContent   = '✏ Modifier l\'événement';
-      saveBtn.textContent     = '✔ Mettre à jour';
-      cancelEditBtn.style.display = '';
-      evDate.focus();
-      document.querySelector('.card').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function stopEdit() {
-      editingId = null;
-      editId.value = '';
-      formTitle.textContent       = '➕ Ajouter un événement';
-      saveBtn.textContent         = '✔ Enregistrer';
-      cancelEditBtn.style.display = 'none';
-      eventForm.reset();
-    }
-
-    cancelEditBtn.addEventListener('click', stopEdit);
-
-    // ---- Delete ----
-    function deleteEvent(id) {
-      if (!confirm('Supprimer cet événement ?')) return;
-      const events = loadEvents().filter(ev => ev.id !== id);
-      saveEvents(events);
-      renderAdminList();
-      if (editingId === id) stopEdit();
-      showToast('Événement supprimé.');
-    }
-
-    // ---- Escape helper ----
-    function escHtml(str) {
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
-    }
   </script>
 
 </body>
