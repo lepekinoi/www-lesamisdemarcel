@@ -1,0 +1,34 @@
+name: Sync calendar
+
+on:
+  schedule:
+    # Every 30 minutes
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch iCal from Nextcloud
+        run: |
+          curl -fsSL --max-time 30 \
+            "https://nxtcld.lesamisdemarcel.fr/remote.php/dav/public-calendars/yFFj9TrYN2R8oCkT?export" \
+            -o calendar.ics
+
+      - name: Commit updated calendar if changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add calendar.ics
+          if git diff --cached --quiet; then
+            echo "No changes to calendar.ics"
+          else
+            git commit -m "chore: sync calendar.ics [skip ci]"
+            git push
+          fi
