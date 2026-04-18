@@ -517,7 +517,7 @@
         today.setHours(0, 0, 0, 0);
 
         const events = parseIcal(text)
-          .filter(e => (e.dateEnd || e.date) >= today)
+          .filter(e => e.dateEnd ? e.dateEnd > today : e.date >= today)
           .sort((a, b) => a.date - b.date);
 
         list.querySelectorAll('.event-card').forEach(el => el.remove());
@@ -528,13 +528,15 @@
         }
 
         empty.style.display = 'none';
-        events.forEach(ev => {
+        events.forEach((ev, index) => {
           const day = String(ev.date.getDate()).padStart(2, '0');
           const mon = FR_MONTHS[ev.date.getMonth()];
+          const isNext = index === 0;
 
           const article = document.createElement('article');
-          article.className = 'event-card fade-up visible';
+          article.className = 'event-card fade-up visible' + (isNext ? ' event-card--next' : '');
           article.innerHTML = `
+            ${isNext ? '<span class="event-next-label">⭐ Prochain événement</span>' : ''}
             <div class="event-date">
               <strong>${day}</strong>
               <span>${mon}</span>

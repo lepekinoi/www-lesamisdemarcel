@@ -630,6 +630,32 @@ ul {
   box-shadow: var(--shadow-md);
 }
 
+.event-card--next {
+  flex-wrap: wrap;
+  border-left: 4px solid var(--color-secondary);
+  background: linear-gradient(135deg, var(--color-white) 0%, #fffbf0 100%);
+}
+
+.event-card--next .event-date {
+  background: var(--color-secondary);
+  color: var(--color-dark);
+}
+
+.event-next-label {
+  flex-basis: 100%;
+  display: inline-block;
+  background: var(--color-secondary);
+  color: var(--color-dark);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: .2rem .6rem;
+  border-radius: 4px;
+  margin-bottom: .5rem;
+  width: fit-content;
+}
+
 .event-date {
   flex-shrink: 0;
   background: var(--color-primary);
