@@ -176,10 +176,10 @@
             <span class="section-tag">À venir</span>
             <h2 class="section-title" style="margin-bottom:0">Prochains événements</h2>
           </div>
-          <a href="https://nxtcld.lesamisdemarcel.fr/apps/calendar/p/yFFj9TrYN2R8oCkT"
-           class="btn btn-primary" target="_blank" rel="noopener"
-           title="Voir l'agenda complet sur Nextcloud">📅 Voir l'agenda complet</a>
         </div>
+
+        <!-- Filtres mensuels (générés dynamiquement) -->
+        <div class="month-filters" id="monthFilters" style="display:none" aria-label="Filtrer par mois"></div>
 
         <!-- Events are loaded dynamically from the Nextcloud Calendar iCal feed -->
         <div class="events-list" id="eventsList">
@@ -535,7 +535,7 @@
           <ul>
             <li><a href="mailto:contact@lesamisdemarcel.fr">contact@lesamisdemarcel.fr</a></li>
             <li>École Marcel Pagnol<br />Notre-Dame-des-Landes (44130)</li>
-            <li><a href="https://nxtcld.lesamisdemarcel.fr/apps/calendar/p/yFFj9TrYN2R8oCkT" target="_blank" rel="noopener">📅 Agenda Nextcloud</a></li>
+            <li><a href="#agenda">📅 Agenda</a></li>
             <li><a href="confidentialite.html">Politique de confidentialité</a></li>
           </ul>
         </div>
@@ -592,18 +592,21 @@
 
     // ---- Dynamic Events (Nextcloud Calendar iCal feed) ----
     const NEXTCLOUD_ICAL = 'https://nxtcld.lesamisdemarcel.fr/remote.php/dav/public-calendars/yFFj9TrYN2R8oCkT?export';
+    const CACHE_KEY = 'lam_ical_cache';
+    const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
 
     // Multiple CORS proxies tried in order until one succeeds
     const CORS_PROXIES = [
       u => 'https://corsproxy.io/?' + encodeURIComponent(u),
       u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u),
+      u => 'https://corsproxy.org/?' + encodeURIComponent(u),
     ];
 
     async function fetchIcal(url) {
       let lastError;
       for (const makeProxy of CORS_PROXIES) {
         try {
-          const resp = await fetch(makeProxy(url));
+          const resp = await fetch(makeProxy(url), { signal: AbortSignal.timeout(8000) });
           if (resp.ok) return await resp.text();
           lastError = new Error('HTTP ' + resp.status);
         } catch (e) {
@@ -613,7 +616,20 @@
       throw lastError;
     }
 
+    function getCachedIcal() {
+      try {
+        const cached = JSON.parse(localStorage.getItem(CACHE_KEY));
+        if (cached && Date.now() - cached.ts < CACHE_TTL) return cached.data;
+      } catch {}
+      return null;
+    }
+
+    function setCachedIcal(data) {
+      try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data })); } catch {}
+    }
+
     const FR_MONTHS = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+    const FR_MONTHS_LONG = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
 
     // Unfold iCal continuation lines (lines starting with space/tab are a continuation of the previous line)
     function unfoldIcal(text) {
@@ -690,61 +706,161 @@
         .replace(/"/g, '&quot;');
     }
 
+    let allEvents = [];
+    let activeMonthKey = null;
+
+    function renderEvents(events) {
+      const list  = document.getElementById('eventsList');
+      const empty = document.getElementById('eventsEmpty');
+
+      list.querySelectorAll('.event-card').forEach(el => el.remove());
+
+      if (events.length === 0) {
+        empty.style.display = 'block';
+        empty.textContent = activeMonthKey
+          ? 'Aucun événement ce mois-ci.'
+          : 'Aucun événement à venir pour le moment. Revenez bientôt !';
+        return;
+      }
+
+      empty.style.display = 'none';
+      events.forEach((ev, index) => {
+        const day = String(ev.date.getDate()).padStart(2, '0');
+        const mon = FR_MONTHS[ev.date.getMonth()];
+        // Highlight the very first upcoming event only when no month filter is active
+        const isNext = index === 0 && !activeMonthKey;
+
+        const article = document.createElement('article');
+        article.className = 'event-card fade-up visible' + (isNext ? ' event-card--next' : '');
+        article.innerHTML = `
+          ${isNext ? '<span class="event-next-label">⭐ Prochain événement</span>' : ''}
+          <div class="event-date">
+            <strong>${day}</strong>
+            <span>${mon}</span>
+          </div>
+          <div class="event-info">
+            <h3>${escHtml(ev.title)}</h3>
+            ${ev.location    ? '<p>'                          + escHtml(ev.location)    + '</p>'    : ''}
+            ${ev.category    ? '<span class="event-tag">'    + escHtml(ev.category)    + '</span>' : ''}
+            ${ev.description ? '<p class="event-desc">'      + escHtml(ev.description) + '</p>'    : ''}
+          </div>`;
+        list.appendChild(article);
+      });
+    }
+
+    function applyActiveFilter() {
+      if (!activeMonthKey) {
+        renderEvents(allEvents);
+      } else {
+        const [year, month] = activeMonthKey.split('-').map(Number);
+        renderEvents(allEvents.filter(ev =>
+          ev.date.getFullYear() === year && ev.date.getMonth() === month
+        ));
+      }
+    }
+
+    function buildMonthFilters() {
+      const container = document.getElementById('monthFilters');
+      container.innerHTML = '';
+
+      // Collect unique year-month keys in order
+      const months = new Map();
+      allEvents.forEach(ev => {
+        const key = `${ev.date.getFullYear()}-${ev.date.getMonth()}`;
+        if (!months.has(key)) {
+          months.set(key, `${FR_MONTHS_LONG[ev.date.getMonth()]} ${ev.date.getFullYear()}`);
+        }
+      });
+
+      if (months.size <= 1) {
+        container.style.display = 'none';
+        return;
+      }
+
+      container.style.display = 'flex';
+
+      const allBtn = document.createElement('button');
+      allBtn.className = 'month-btn' + (activeMonthKey === null ? ' month-btn--active' : '');
+      allBtn.textContent = 'Tous';
+      allBtn.dataset.month = '';
+      container.appendChild(allBtn);
+
+      months.forEach((label, key) => {
+        const btn = document.createElement('button');
+        btn.className = 'month-btn' + (activeMonthKey === key ? ' month-btn--active' : '');
+        btn.textContent = label;
+        btn.dataset.month = key;
+        container.appendChild(btn);
+      });
+    }
+
+    function showRetryButton() {
+      const empty = document.getElementById('eventsEmpty');
+      empty.textContent = 'Impossible de charger les événements. ';
+      const retryBtn = document.createElement('button');
+      retryBtn.className = 'btn-retry';
+      retryBtn.id = 'retryEvents';
+      retryBtn.textContent = 'Réessayer';
+      empty.appendChild(retryBtn);
+      empty.style.display = 'block';
+      retryBtn.addEventListener('click', () => {
+        empty.style.display = 'none';
+        document.getElementById('eventsLoading').style.display = 'block';
+        loadAndRenderEvents();
+      });
+    }
+
     async function loadAndRenderEvents() {
-      const list    = document.getElementById('eventsList');
-      const empty   = document.getElementById('eventsEmpty');
       const loading = document.getElementById('eventsLoading');
 
+      // Show cached data immediately if available
+      const cached = getCachedIcal();
+      if (cached) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        allEvents = parseIcal(cached)
+          .filter(e => e.dateEnd ? e.dateEnd > today : e.date >= today)
+          .sort((a, b) => a.date - b.date);
+        loading.style.display = 'none';
+        buildMonthFilters();
+        applyActiveFilter();
+      }
+
+      // Fetch fresh data (in background when cache was available)
       try {
         const text = await fetchIcal(NEXTCLOUD_ICAL);
-        loading.style.display = 'none';
+        setCachedIcal(text);
 
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-
-        const events = parseIcal(text)
+        allEvents = parseIcal(text)
           .filter(e => e.dateEnd ? e.dateEnd > today : e.date >= today)
           .sort((a, b) => a.date - b.date);
 
-        list.querySelectorAll('.event-card').forEach(el => el.remove());
-
-        if (events.length === 0) {
-          empty.style.display = 'block';
-          return;
-        }
-
-        empty.style.display = 'none';
-        events.forEach((ev, index) => {
-          const day = String(ev.date.getDate()).padStart(2, '0');
-          const mon = FR_MONTHS[ev.date.getMonth()];
-          const isNext = index === 0;
-
-          const article = document.createElement('article');
-          article.className = 'event-card fade-up visible' + (isNext ? ' event-card--next' : '');
-          article.innerHTML = `
-            ${isNext ? '<span class="event-next-label">⭐ Prochain événement</span>' : ''}
-            <div class="event-date">
-              <strong>${day}</strong>
-              <span>${mon}</span>
-            </div>
-            <div class="event-info">
-              <h3>${escHtml(ev.title)}</h3>
-              ${ev.location    ? '<p>'                          + escHtml(ev.location)    + '</p>'    : ''}
-              ${ev.category    ? '<span class="event-tag">'    + escHtml(ev.category)    + '</span>' : ''}
-              ${ev.description ? '<p class="event-desc">'      + escHtml(ev.description) + '</p>'    : ''}
-            </div>`;
-          list.appendChild(article);
-        });
+        loading.style.display = 'none';
+        buildMonthFilters();
+        applyActiveFilter();
       } catch (err) {
         console.error('Erreur chargement calendrier :', err);
-        loading.style.display = 'none';
-        list.querySelectorAll('.event-card').forEach(el => el.remove());
-        empty.textContent = 'Impossible de charger les événements pour le moment.';
-        empty.style.display = 'block';
+        if (!cached) {
+          loading.style.display = 'none';
+          showRetryButton();
+        }
+        // If we had cached data, keep displaying it silently
       }
     }
 
     loadAndRenderEvents();
+
+    // Month filter click handler (delegated, registered once)
+    document.getElementById('monthFilters').addEventListener('click', e => {
+      const btn = e.target.closest('.month-btn');
+      if (!btn) return;
+      document.querySelectorAll('#monthFilters .month-btn').forEach(b => b.classList.remove('month-btn--active'));
+      btn.classList.add('month-btn--active');
+      activeMonthKey = btn.dataset.month || null;
+      applyActiveFilter();
+    });
 
     // ---- Formulaire de contact (Formspree) ----
     const contactForm = document.getElementById('contactForm');

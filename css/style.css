@@ -719,6 +719,48 @@ ul {
   text-align: center;
 }
 
+.btn-retry {
+  display: inline-block;
+  margin-left: .5rem;
+  padding: .3rem .9rem;
+  background: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  border-radius: 50px;
+  font-family: var(--font-body);
+  font-size: .82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity var(--transition);
+}
+.btn-retry:hover { opacity: .85; }
+
+/* ---- Month filters ---- */
+.month-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-bottom: 1.5rem;
+}
+
+.month-btn {
+  padding: .35rem .9rem;
+  border: 1.5px solid var(--color-primary);
+  border-radius: 50px;
+  background: transparent;
+  color: var(--color-primary);
+  font-family: var(--font-body);
+  font-size: .82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+.month-btn:hover,
+.month-btn--active {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
 .events-loading {
   color: var(--color-muted);
   font-style: italic;
