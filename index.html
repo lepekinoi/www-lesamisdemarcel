@@ -6,6 +6,17 @@
   <meta name="description" content="Les Amis de Marcel — Association de parents d'élèves de l'école Marcel Pagnol à Notre-Dame-des-Landes, section de l'Amicale Laïque." />
   <title>Les Amis de Marcel — École Marcel Pagnol, Notre-Dame-des-Landes</title>
 
+  <!-- Open Graph / réseaux sociaux -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.lesamisdemarcel.fr/" />
+  <meta property="og:title" content="Les Amis de Marcel — École Marcel Pagnol, Notre-Dame-des-Landes" />
+  <meta property="og:description" content="L'association de parents d'élèves de l'école Marcel Pagnol à Notre-Dame-des-Landes, section de l'Amicale Laïque. Unis pour soutenir nos enfants et animer la vie scolaire." />
+  <meta property="og:image" content="https://github.com/user-attachments/assets/6d697ea5-410b-47c3-bab9-8ef658ee49b0" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -36,9 +47,11 @@
       <ul class="nav-menu" id="navMenu" role="list">
         <li><a href="#accueil">Accueil</a></li>
         <li><a href="#association">Association</a></li>
+        <li><a href="#actualites">Actualités</a></li>
         <li><a href="#agenda">Agenda</a></li>
         <li><a href="#activites">Activités</a></li>
         <li><a href="#fonds">Les fonds</a></li>
+        <li><a href="#adhesion">Adhésion</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
 
@@ -63,7 +76,7 @@
         </p>
         <div class="hero-actions">
           <a href="#association" class="btn btn-primary">Découvrir l'association</a>
-          <a href="#contact" class="btn btn-outline">Nous rejoindre</a>
+          <a href="#adhesion" class="btn btn-outline">Nous rejoindre</a>
         </div>
       </div>
       <div class="hero-scroll" aria-hidden="true">Défiler</div>
@@ -116,6 +129,40 @@
               </div>
             </div>
           </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ======= Actualités ======= -->
+    <section class="actualites" id="actualites">
+      <div class="container">
+
+        <div class="actualites-header fade-up">
+          <span class="section-tag">Vie de l'association</span>
+          <h2 class="section-title">Actualités</h2>
+        </div>
+
+        <!-- Mettre à jour ce contenu 3 à 4 fois par an -->
+        <div class="actualites-grid">
+
+          <article class="actu-card fade-up">
+            <time class="actu-date" datetime="2025-04">Avril 2025</time>
+            <h3>Bilan de la vente de Pâques 🥚</h3>
+            <p>Grâce à votre participation, nous avons récolté 480 € lors de notre vente de chocolats de Pâques. Un grand merci à toutes les familles !</p>
+          </article>
+
+          <article class="actu-card fade-up">
+            <time class="actu-date" datetime="2025-02">Février 2025</time>
+            <h3>Carnaval à l'école Marcel Pagnol 🎭</h3>
+            <p>Le carnaval organisé avec l'équipe enseignante a rassemblé plus de 150 personnes dans la bonne humeur. Un beau moment de partage !</p>
+          </article>
+
+          <article class="actu-card fade-up">
+            <time class="actu-date" datetime="2024-09">Rentrée 2024–2025</time>
+            <h3>Bienvenue aux nouvelles familles ! 👋</h3>
+            <p>L'association accueille de nouvelles familles cette année. N'hésitez pas à nous rejoindre et à participer à la vie de l'école !</p>
+          </article>
 
         </div>
       </div>
@@ -186,6 +233,56 @@
       </div>
     </section>
 
+    <!-- ======= Galerie ======= -->
+    <section class="galerie" id="galerie">
+      <div class="container">
+
+        <div class="galerie-header fade-up">
+          <span class="section-tag">Nos souvenirs</span>
+          <h2 class="section-title">Galerie photos</h2>
+          <p class="section-subtitle">Quelques moments forts de la vie de l'association tout au long de l'année.</p>
+        </div>
+
+        <!--
+          Pour ajouter une photo depuis Nextcloud, remplacez le div.galerie-placeholder par :
+          <img src="URL_NEXTCLOUD_DE_LA_PHOTO" alt="Description de la photo" loading="lazy" />
+        -->
+        <div class="galerie-grid fade-up">
+
+          <figure class="galerie-item">
+            <div class="galerie-placeholder" aria-hidden="true">🎉</div>
+            <figcaption>Kermesse 2024</figcaption>
+          </figure>
+
+          <figure class="galerie-item">
+            <div class="galerie-placeholder" aria-hidden="true">🎭</div>
+            <figcaption>Spectacle de fin d'année</figcaption>
+          </figure>
+
+          <figure class="galerie-item">
+            <div class="galerie-placeholder" aria-hidden="true">🌿</div>
+            <figcaption>Sortie nature</figcaption>
+          </figure>
+
+          <figure class="galerie-item">
+            <div class="galerie-placeholder" aria-hidden="true">🤝</div>
+            <figcaption>Vide-grenier solidaire</figcaption>
+          </figure>
+
+          <figure class="galerie-item">
+            <div class="galerie-placeholder" aria-hidden="true">🎨</div>
+            <figcaption>Atelier créatif</figcaption>
+          </figure>
+
+          <figure class="galerie-item">
+            <div class="galerie-placeholder" aria-hidden="true">⛺</div>
+            <figcaption>Classe découverte</figcaption>
+          </figure>
+
+        </div>
+      </div>
+    </section>
+
     <!-- ======= Fonds ======= -->
     <section class="fonds" id="fonds">
       <div class="container">
@@ -214,27 +311,93 @@
           Et derrière ces chiffres, il y a surtout des projets rendus possibles… et des souvenirs créés pour les enfants.
         </p>
 
+        <!-- Bilan annuel — à mettre à jour chaque fin d'année scolaire (juin) -->
+        <div class="fonds-bilan fade-up">
+          <h3 class="fonds-bilan-title">📊 Bilan annuel</h3>
+          <div class="bilan-table-wrap">
+            <table class="bilan-table">
+              <thead>
+                <tr>
+                  <th>Année scolaire</th>
+                  <th>Recettes</th>
+                  <th>Reversé à l'école</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="bilan-current">
+                  <td>2024–2025</td>
+                  <td><em>En cours…</em></td>
+                  <td>—</td>
+                </tr>
+                <tr>
+                  <td>2023–2024</td>
+                  <td>6 200 €</td>
+                  <td>5 800 €</td>
+                </tr>
+                <tr>
+                  <td>2022–2023</td>
+                  <td>5 400 €</td>
+                  <td>5 100 €</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
       </div>
     </section>
 
-    <!-- ======= Join / CTA ======= -->
-    <section class="join">
+    <!-- ======= Adhésion ======= -->
+    <section class="adhesion" id="adhesion">
       <div class="container">
-        <span class="section-tag" style="color:rgba(255,255,255,.6)">Adhésion</span>
-        <h2 class="section-title">Rejoignez les Amis de Marcel</h2>
-        <p class="section-subtitle">
-          Ouverte à tous les parents d'élèves de l'école Marcel Pagnol, notre association
-          accueille avec joie chaque nouvelle famille. Votre engagement, même ponctuel,
-          fait la différence pour nos enfants.
-        </p>
-        <div class="join-actions">
-          <a href="#contact" class="btn btn-primary">Nous rejoindre</a>
-          <a href="mailto:contact@lesamisdemarcel.fr" class="btn btn-outline">Nous écrire</a>
+
+        <div class="adhesion-header fade-up">
+          <span class="section-tag" style="color:rgba(255,255,255,.65)">Rejoignez-nous</span>
+          <h2 class="section-title">Adhérez aux Amis de Marcel</h2>
+          <p class="section-subtitle">
+            Ouverte à tous les parents d'élèves de l'école Marcel Pagnol, notre association
+            accueille avec joie chaque nouvelle famille. Votre engagement, même ponctuel,
+            fait la différence pour nos enfants.
+          </p>
         </div>
-        <blockquote class="join-quote">
+
+        <div class="adhesion-grid">
+
+          <div class="adhesion-card fade-up">
+            <!-- Montant à mettre à jour si besoin -->
+            <div class="adhesion-price">
+              <strong>5 €</strong>
+              <span>par famille · par an</span>
+            </div>
+            <ul class="adhesion-avantages">
+              <li>Voter aux Assemblées Générales</li>
+              <li>Être informé en priorité des projets et événements</li>
+              <li>Participer activement à la vie de l'école</li>
+              <li>Rejoindre une communauté de parents engagés</li>
+            </ul>
+          </div>
+
+          <div class="adhesion-actions-col fade-up">
+            <!-- TODO : remplacez l'URL ci-dessous par votre lien HelloAsso réel -->
+            <a href="https://www.helloasso.com/associations/les-amis-de-marcel"
+               class="btn btn-secondary" target="_blank" rel="noopener">
+              🎫 Adhérer en ligne via HelloAsso
+            </a>
+            <a href="#contact" class="btn btn-outline-white">
+              ✉️ Nous écrire pour adhérer
+            </a>
+            <p class="adhesion-note">
+              L'adhésion est valable pour l'année scolaire en cours et donne accès à toutes les activités de l'association.
+            </p>
+          </div>
+
+        </div>
+
+        <blockquote class="adhesion-quote">
           « L'école, c'est la deuxième maison des enfants. Faisons-la belle ensemble. »
           <cite>— Les Amis de Marcel</cite>
         </blockquote>
+
       </div>
     </section>
 
@@ -266,8 +429,14 @@
           </div>
 
           <div class="contact-form fade-up">
-            <!-- Note: form submission requires server-side processing (e.g. PHP, Netlify Forms, Formspree). -->
-            <form action="#" method="post" novalidate>
+            <!--
+              Formspree : créez un compte sur https://formspree.io et remplacez
+              VOTRE_ID_FORMSPREE par l'ID de votre formulaire (ex: xpwzgkdo).
+            -->
+            <form action="https://formspree.io/f/VOTRE_ID_FORMSPREE" method="post"
+                  id="contactForm" novalidate>
+              <input type="hidden" name="_subject" value="Message via le site — Les Amis de Marcel" />
+
               <div class="form-row">
                 <div class="form-group">
                   <label for="prenom">Prénom</label>
@@ -296,8 +465,22 @@
                 <label for="message">Message</label>
                 <textarea id="message" name="message" placeholder="Votre message…" required></textarea>
               </div>
-              <button type="submit" class="btn btn-primary" style="width:100%">Envoyer le message</button>
+              <div class="form-group form-group--checkbox">
+                <label class="checkbox-label">
+                  <input type="checkbox" name="rgpd" id="rgpd" required />
+                  <span>J'accepte que mes données personnelles soient utilisées pour traiter ma demande, conformément à notre <a href="confidentialite.html">politique de confidentialité</a>.</span>
+                </label>
+              </div>
+              <button type="submit" id="submitBtn" class="btn btn-primary" style="width:100%">Envoyer le message</button>
             </form>
+
+            <div id="formSuccess" class="form-feedback form-success" style="display:none" role="alert">
+              ✅ <strong>Message envoyé !</strong> Nous vous répondrons dans les meilleurs délais.
+            </div>
+            <div id="formError" class="form-feedback form-error" style="display:none" role="alert">
+              ❌ Une erreur est survenue. Merci d'envoyer votre message directement à
+              <a href="mailto:contact@lesamisdemarcel.fr">contact@lesamisdemarcel.fr</a>.
+            </div>
           </div>
 
         </div>
@@ -328,9 +511,11 @@
           <ul>
             <li><a href="#accueil">Accueil</a></li>
             <li><a href="#association">Association</a></li>
+            <li><a href="#actualites">Actualités</a></li>
             <li><a href="#agenda">Agenda</a></li>
             <li><a href="#activites">Activités</a></li>
             <li><a href="#fonds">Les fonds</a></li>
+            <li><a href="#adhesion">Adhésion</a></li>
             <li><a href="#contact">Contact</a></li>
           </ul>
         </div>
@@ -351,14 +536,15 @@
             <li><a href="mailto:contact@lesamisdemarcel.fr">contact@lesamisdemarcel.fr</a></li>
             <li>École Marcel Pagnol<br />Notre-Dame-des-Landes (44130)</li>
             <li><a href="https://nxtcld.lesamisdemarcel.fr/apps/calendar/p/yFFj9TrYN2R8oCkT" target="_blank" rel="noopener">📅 Agenda Nextcloud</a></li>
+            <li><a href="confidentialite.html">Politique de confidentialité</a></li>
           </ul>
         </div>
 
       </div>
 
       <div class="footer-bottom">
-        <span>© 2025 Les Amis de Marcel — Tous droits réservés</span>
-        <span>Fait avec ❤️ à Notre-Dame-des-Landes</span>
+        <span>© 2026 Les Amis de Marcel — Tous droits réservés</span>
+        <span>Fait avec ❤️ à Notre-Dame-des-Landes · <a href="confidentialite.html">Confidentialité</a></span>
       </div>
     </div>
   </footer>
@@ -559,6 +745,39 @@
     }
 
     loadAndRenderEvents();
+
+    // ---- Formulaire de contact (Formspree) ----
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+      contactForm.addEventListener('submit', async e => {
+        e.preventDefault();
+        const successEl = document.getElementById('formSuccess');
+        const errorEl   = document.getElementById('formError');
+        const submitBtn = document.getElementById('submitBtn');
+
+        submitBtn.disabled    = true;
+        submitBtn.textContent = 'Envoi en cours…';
+
+        try {
+          const resp = await fetch(contactForm.action, {
+            method:  'POST',
+            body:    new FormData(contactForm),
+            headers: { Accept: 'application/json' },
+          });
+          if (resp.ok) {
+            contactForm.style.display = 'none';
+            successEl.style.display   = 'block';
+          } else {
+            throw new Error('HTTP ' + resp.status);
+          }
+        } catch (err) {
+          console.error('Erreur envoi formulaire :', err);
+          errorEl.style.display = 'block';
+          submitBtn.disabled    = false;
+          submitBtn.textContent = 'Envoyer le message';
+        }
+      });
+    }
   </script>
 
 </body>
