@@ -1,2 +1,116 @@
-# www-lesamisdemarcel
-Dev du site des Amis de Marcel
+# 🏫 Les Amis de Marcel — Site web
+
+> Site officiel de l'association de parents d'élèves de l'école Marcel Pagnol  
+> à **Notre-Dame-des-Landes (44130)**, section de l'**Amicale Laïque**.
+
+---
+
+## 📋 Sommaire
+
+- [Présentation](#-présentation)
+- [Structure du site](#-structure-du-site)
+- [Stack technique](#-stack-technique)
+- [Organisation du dépôt](#-organisation-du-dépôt)
+- [Développement local](#-développement-local)
+- [Administration](#-administration)
+- [Contact](#-contact)
+
+---
+
+## 🌟 Présentation
+
+**Les Amis de Marcel** est une association de parents d'élèves (APE) engagée aux côtés de l'école Marcel Pagnol. Elle organise tout au long de l'année scolaire des événements festifs, des collectes de fonds et des activités pour soutenir les projets pédagogiques et améliorer le quotidien des enfants.
+
+| 📍 Lieu | École Marcel Pagnol, Notre-Dame-des-Landes (44130) |
+|---|---|
+| 📧 Contact | contact@lesamisdemarcel.fr |
+| 📅 Agenda | [Nextcloud Calendar](https://nxtcld.lesamisdemarcel.fr/apps/calendar/p/yFFj9TrYN2R8oCkT) |
+
+---
+
+## 🗂️ Structure du site
+
+Le site est une **page unique (SPA-like)** organisée en sections :
+
+| Section | Ancre | Description |
+|---|---|---|
+| 🏠 Accueil | `#accueil` | Hero avec présentation et appels à l'action |
+| 🤝 Association | `#association` | Qui sommes-nous, nos valeurs |
+| 📅 Agenda | `#agenda` | Prochains événements (flux iCal Nextcloud) |
+| 🎉 Activités | `#activites` | Kermesse, spectacles, sorties, collectes |
+| 💰 Les fonds | `#fonds` | À quoi servent les fonds collectés |
+| ✉️ Contact | `#contact` | Formulaire de contact et coordonnées |
+
+---
+
+## 🛠️ Stack technique
+
+Le site est volontairement **léger et sans dépendances externes** côté JavaScript :
+
+| Composant | Technologie |
+|---|---|
+| Structure | HTML5 sémantique |
+| Style | CSS3 (mobile-first, variables CSS, animations) |
+| Interactivité | Vanilla JavaScript (ES6+) |
+| Polices | [Google Fonts](https://fonts.google.com/) — *Playfair Display* & *Lato* |
+| Calendrier | Flux iCal public Nextcloud |
+| Hébergement | Fichiers statiques |
+
+**Palette de couleurs :**
+
+| Rôle | Couleur |
+|---|---|
+| Primaire | `#2563a8` (bleu) |
+| Secondaire | `#f59e2e` (ambre) |
+| Accent | `#f97316` (orange) |
+| Fond | `#ede9e0` (beige chaud) |
+
+---
+
+## 📁 Organisation du dépôt
+
+```
+www-lesamisdemarcel/
+├── index.html          # Page principale du site
+├── css/
+│   └── style.css       # Feuille de style (mobile-first)
+├── admin/
+│   └── index.html      # Interface d'administration (protégée)
+├── README.md           # Ce fichier
+└── ROADMAP.md          # Évolutions et ajouts de contenu prévus
+```
+
+---
+
+## 💻 Développement local
+
+Aucun outil de build n'est requis. Il suffit d'ouvrir `index.html` dans un navigateur ou de servir le dossier via un serveur local :
+
+```bash
+# Avec Python 3
+python3 -m http.server 8080
+
+# Avec Node.js (npx)
+npx serve .
+```
+
+Puis ouvrir [http://localhost:8080](http://localhost:8080).
+
+---
+
+## 🔐 Administration
+
+Une interface d'administration est accessible via `/admin/`. Elle est protégée par mot de passe et permet de gérer les contenus du site.
+
+---
+
+## 📬 Contact
+
+Pour toute question sur le site ou l'association :
+
+- **Email :** [contact@lesamisdemarcel.fr](mailto:contact@lesamisdemarcel.fr)
+- **Adresse :** École Marcel Pagnol, Notre-Dame-des-Landes (44130)
+
+---
+
+*Fait avec ❤️ à Notre-Dame-des-Landes — © 2025 Les Amis de Marcel*
