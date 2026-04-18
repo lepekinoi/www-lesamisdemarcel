@@ -810,8 +810,13 @@
 
     function showRetryButton() {
       const empty = document.getElementById('eventsEmpty');
-      empty.innerHTML = 'Impossible de charger les événements. '
-        + '<a href="mailto:contact@lesamisdemarcel.fr" style="text-decoration:underline">Contactez-nous</a> pour connaître le programme. ';
+      empty.textContent = 'Impossible de charger les événements. ';
+      const contactLink = document.createElement('a');
+      contactLink.href = 'mailto:contact@lesamisdemarcel.fr';
+      contactLink.style.textDecoration = 'underline';
+      contactLink.textContent = 'Contactez-nous';
+      empty.appendChild(contactLink);
+      empty.appendChild(document.createTextNode(' pour connaître le programme. '));
       const retryBtn = document.createElement('button');
       retryBtn.className = 'btn-retry';
       retryBtn.id = 'retryEvents';
