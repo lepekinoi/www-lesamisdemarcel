@@ -592,7 +592,8 @@
 
     // ---- Dynamic Events (agenda synchronized by the GitHub Actions runbook) ----
     // agendas/calendar.ics is generated from Nextcloud and committed on the main branch by CI
-    const LOCAL_ICAL  = 'agendas/calendar.ics';
+    // Served directly from GitHub raw so the site always reads the latest committed version
+    const ICAL_URL    = 'https://raw.githubusercontent.com/lepekinoi/www-lesamisdemarcel/main/agendas/calendar.ics';
     const CACHE_KEY = 'lam_ical_cache';
     const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
 
@@ -626,7 +627,7 @@
       // The site displays the agenda file synchronized by the runbook
       let lastError = null;
       try {
-        const resp = await fetchWithTimeout(LOCAL_ICAL, 5000);
+        const resp = await fetchWithTimeout(ICAL_URL, 5000);
         if (resp.ok) return await resp.text();
         lastError = new Error(`HTTP ${resp.status}`);
       } catch (err) {
@@ -634,7 +635,7 @@
         lastError = err;
       }
 
-      throw new Error(`Impossible de charger ${LOCAL_ICAL}${lastError?.message ? ` (${lastError.message})` : ''}`);
+      throw new Error(`Impossible de charger ${ICAL_URL}${lastError?.message ? ` (${lastError.message})` : ''}`);
     }
 
     function getCachedIcal() {
