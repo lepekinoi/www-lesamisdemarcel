@@ -608,7 +608,7 @@
       try {
         const resp = await fetchWithTimeout(LOCAL_ICAL, 5000);
         if (resp.ok) return await resp.text();
-      } catch (_) { /* file not yet present */ }
+      } catch (_) { /* failed to fetch synchronized agenda */ }
 
       throw new Error(`Impossible de charger ${LOCAL_ICAL}`);
     }
