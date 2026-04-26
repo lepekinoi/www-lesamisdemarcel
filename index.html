@@ -605,12 +605,17 @@
 
     async function fetchIcal() {
       // The site displays the agenda file synchronized by the runbook
+      let lastError = null;
       try {
         const resp = await fetchWithTimeout(LOCAL_ICAL, 5000);
         if (resp.ok) return await resp.text();
-      } catch (_) { /* failed to fetch synchronized agenda */ }
+        lastError = new Error(`HTTP ${resp.status}`);
+      } catch (err) {
+        console.warn('Erreur de chargement de l’agenda synchronisé :', err);
+        lastError = err;
+      }
 
-      throw new Error(`Impossible de charger ${LOCAL_ICAL}`);
+      throw new Error(`Impossible de charger ${LOCAL_ICAL}${lastError?.message ? ` (${lastError.message})` : ''}`);
     }
 
     function getCachedIcal() {
