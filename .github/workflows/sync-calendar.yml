@@ -19,18 +19,19 @@ jobs:
 
       - name: Fetch iCal from Nextcloud
         run: |
+          mkdir -p agendas
           curl -fsSL --max-time 30 \
             "https://nxtcld.lesamisdemarcel.fr/remote.php/dav/public-calendars/yFFj9TrYN2R8oCkT?export" \
-            -o calendar.ics
+            -o agendas/calendar.ics
 
       - name: Commit updated calendar if changed
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add calendar.ics
+          git add agendas/calendar.ics
           if git diff --cached --quiet; then
-            echo "No changes to calendar.ics"
+            echo "No changes to agendas/calendar.ics"
           else
-            git commit -m "chore: sync calendar.ics"
+            git commit -m "chore: sync agendas/calendar.ics"
             git push
           fi

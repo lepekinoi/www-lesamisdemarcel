@@ -36,7 +36,7 @@ Le site est une **page unique (SPA-like)** organisée en sections :
 |---|---|---|
 | 🏠 Accueil | `#accueil` | Hero avec présentation et appels à l'action |
 | 🤝 Association | `#association` | Qui sommes-nous, nos valeurs |
-| 📅 Agenda | `#agenda` | Prochains événements (flux iCal Nextcloud) |
+| 📅 Agenda | `#agenda` | Prochains événements (fichier iCal synchronisé depuis Nextcloud) |
 | 🎉 Activités | `#activites` | Kermesse, spectacles, sorties, collectes |
 | 💰 Les fonds | `#fonds` | À quoi servent les fonds collectés |
 | ✉️ Contact | `#contact` | Formulaire de contact et coordonnées |
@@ -71,6 +71,8 @@ Le site est volontairement **léger et sans dépendances externes** côté JavaS
 
 ```
 www-lesamisdemarcel/
+├── agendas/
+│   └── calendar.ics    # Agenda synchronisé depuis Nextcloud par GitHub Actions
 ├── index.html          # Page principale du site
 ├── css/
 │   └── style.css       # Feuille de style (mobile-first)

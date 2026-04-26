@@ -181,7 +181,7 @@
         <!-- Filtres mensuels (générés dynamiquement) -->
         <div class="month-filters" id="monthFilters" style="display:none" aria-label="Filtrer par mois"></div>
 
-        <!-- Events are loaded dynamically from the Nextcloud Calendar iCal feed -->
+        <!-- Events are loaded dynamically from the agenda synchronized by the GitHub Actions runbook -->
         <div class="events-list" id="eventsList">
           <p class="events-loading" id="eventsLoading">Chargement des événements…</p>
           <p class="events-empty" id="eventsEmpty" style="display:none">
@@ -590,19 +590,11 @@
       fadeEls.forEach(el => el.classList.add('visible'));
     }
 
-    // ---- Dynamic Events (Nextcloud Calendar iCal feed) ----
-    // calendar.ics is kept up-to-date by a GitHub Actions workflow (same-origin, no CORS)
-    const LOCAL_ICAL  = 'calendar.ics';
-    const NEXTCLOUD_ICAL = 'https://nxtcld.lesamisdemarcel.fr/remote.php/dav/public-calendars/yFFj9TrYN2R8oCkT?export';
+    // ---- Dynamic Events (agenda synchronized by the GitHub Actions runbook) ----
+    // agendas/calendar.ics is generated from Nextcloud and committed on the main branch by CI
+    const LOCAL_ICAL  = 'agendas/calendar.ics';
     const CACHE_KEY = 'lam_ical_cache';
     const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
-
-    // Multiple CORS proxies tried in order until one succeeds
-    const CORS_PROXIES = [
-      u => 'https://corsproxy.io/?' + encodeURIComponent(u),
-      u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u),
-      u => 'https://corsproxy.org/?' + encodeURIComponent(u),
-    ];
 
     // Wrapper around fetch with a manual AbortController-based timeout (large browser support)
     function fetchWithTimeout(url, ms) {
@@ -612,30 +604,18 @@
     }
 
     async function fetchIcal() {
-      // 1. Try the local copy first (same-origin, no CORS, kept fresh by CI)
+      // The site displays the agenda file synchronized by the runbook
+      let lastError = null;
       try {
         const resp = await fetchWithTimeout(LOCAL_ICAL, 5000);
         if (resp.ok) return await resp.text();
-      } catch (_) { /* file not yet present — fall through */ }
-
-      // 2. Try the Nextcloud URL directly (works if it has CORS headers)
-      try {
-        const resp = await fetchWithTimeout(NEXTCLOUD_ICAL, 8000);
-        if (resp.ok) return await resp.text();
-      } catch (_) { /* CORS or network error — fall through to proxies */ }
-
-      // 3. Fall back to CORS proxies one by one
-      let lastError;
-      for (const makeProxy of CORS_PROXIES) {
-        try {
-          const resp = await fetchWithTimeout(makeProxy(NEXTCLOUD_ICAL), 8000);
-          if (resp.ok) return await resp.text();
-          lastError = new Error('HTTP ' + resp.status);
-        } catch (e) {
-          lastError = e;
-        }
+        lastError = new Error(`HTTP ${resp.status}`);
+      } catch (err) {
+        console.warn('Erreur de chargement de l’agenda synchronisé :', err);
+        lastError = err;
       }
-      throw lastError;
+
+      throw new Error(`Impossible de charger ${LOCAL_ICAL}${lastError?.message ? ` (${lastError.message})` : ''}`);
     }
 
     function getCachedIcal() {
