@@ -104,6 +104,14 @@ Puis ouvrir [http://localhost:8080](http://localhost:8080).
 
 Une interface d'administration est accessible via `/admin/`. Elle est protégée par mot de passe et permet de gérer les contenus du site.
 
+### Réglages disponibles
+
+| Réglage | Description |
+|---|---|
+| Nombre d'événements à afficher | Liste déroulante (1 à 10) — sauvegardé dans le navigateur de l'administrateur |
+
+> **Note :** Le réglage « nombre d'événements » est stocké dans le `localStorage` du navigateur de l'administrateur et pris en compte au prochain chargement (ou rechargement) de la page d'accueil du site dans ce même navigateur.
+
 ---
 
 ## 📬 Contact
