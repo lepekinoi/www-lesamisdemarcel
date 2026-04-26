@@ -551,20 +551,31 @@
 
   <!-- ======= Scripts ======= -->
   <script>
-    // Mark body as JS-ready so fade-up animations activate
+    /**
+     * Ajoute la classe `js-ready` sur <body> dès que le JS est disponible.
+     * Ceci active les animations CSS .fade-up (opacité + translation).
+     * Sans JS, les éléments restent visibles (pas d'opacity:0 appliquée).
+     */
     document.body.classList.add('js-ready');
 
-    // Mobile nav toggle
+    // ---- Navigation mobile ----
     const toggle = document.getElementById('navToggle');
     const menu   = document.getElementById('navMenu');
 
+    /**
+     * Bascule l'état ouvert/fermé du menu hamburger.
+     * Met à jour aria-expanded pour l'accessibilité.
+     */
     toggle.addEventListener('click', () => {
       const isOpen = menu.classList.toggle('open');
       toggle.classList.toggle('open', isOpen);
       toggle.setAttribute('aria-expanded', String(isOpen));
     });
 
-    // Close menu on link click
+    /**
+     * Ferme automatiquement le menu mobile lorsqu'un lien est cliqué
+     * (navigation vers une ancre de la même page).
+     */
     menu.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         menu.classList.remove('open');
@@ -573,9 +584,15 @@
       });
     });
 
-    // Fade-up on scroll (IntersectionObserver)
+    // ---- Animation fade-up au scroll (IntersectionObserver) ----
     const fadeEls = document.querySelectorAll('.fade-up');
     if ('IntersectionObserver' in window) {
+      /**
+       * Observe chaque élément .fade-up.
+       * Dès que 12 % de l'élément devient visible, on ajoute .visible
+       * pour déclencher la transition CSS (opacité + translation vers le haut).
+       * L'observation est arrêtée après la première apparition (unobserve).
+       */
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
@@ -587,26 +604,33 @@
 
       fadeEls.forEach(el => observer.observe(el));
     } else {
+      // Fallback : navigateurs sans IntersectionObserver → tout afficher immédiatement
       fadeEls.forEach(el => el.classList.add('visible'));
     }
 
-    // ---- Dynamic Events (agenda synchronized by the GitHub Actions runbook) ----
-    // agendas/calendar.ics is generated from Nextcloud and committed on the main branch by CI
-    // Served directly from GitHub raw so the site always reads the latest committed version
-    const ICAL_URL    = 'https://raw.githubusercontent.com/lepekinoi/www-lesamisdemarcel/main/agendas/calendar.ics';
-    const CACHE_KEY = 'lam_ical_cache';
-    const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
+    // ---- Agenda dynamique (synchronisé par le runbook GitHub Actions) ----
+    // Le fichier agendas/calendar.ics est généré depuis Nextcloud et committé sur main par la CI.
+    // On le lit depuis les raw files GitHub pour toujours avoir la version la plus récente.
+    const ICAL_URL  = 'https://raw.githubusercontent.com/lepekinoi/www-lesamisdemarcel/main/agendas/calendar.ics';
+    const CACHE_KEY = 'lam_ical_cache'; // Clé localStorage pour la mise en cache du flux iCal
+    const CACHE_TTL = 30 * 60 * 1000;  // Durée de vie du cache : 30 minutes (en ms)
 
-    // Site configuration loaded from config.json (versioned in the repository)
-    const MIN_EVENTS = 1;
-    const MAX_EVENTS = 10;
-    let siteConfig = { maxEvents: 5 };
+    // Configuration du site chargée depuis config.json (versionné dans le dépôt)
+    const MIN_EVENTS = 1;  // Borne basse du nombre d'événements affichables
+    const MAX_EVENTS = 10; // Borne haute du nombre d'événements affichables
+    let siteConfig = { maxEvents: 5 }; // Valeur par défaut avant chargement du fichier
 
+    /**
+     * Charge config.json depuis le serveur et met à jour siteConfig.
+     * Si le fichier est absent ou invalide, les valeurs par défaut sont conservées.
+     * Utilise fetchWithTimeout pour éviter un blocage réseau trop long.
+     */
     async function loadSiteConfig() {
       try {
         const resp = await fetchWithTimeout('config.json', 5000);
         if (resp.ok) {
           const data = await resp.json();
+          // Validation : maxEvents doit être un entier dans [MIN_EVENTS, MAX_EVENTS]
           if (data && typeof data.maxEvents === 'number' && data.maxEvents >= MIN_EVENTS && data.maxEvents <= MAX_EVENTS) {
             siteConfig.maxEvents = data.maxEvents;
           }
@@ -616,15 +640,28 @@
       }
     }
 
-    // Wrapper around fetch with a manual AbortController-based timeout (large browser support)
+    /**
+     * Wrapper autour de fetch() qui ajoute un délai d'expiration (timeout).
+     * Utilise AbortController pour annuler la requête si elle dépasse `ms` millisecondes.
+     * Assure une large compatibilité navigateur (pas de Promise.race sur fetch).
+     *
+     * @param {string} url  - URL à charger
+     * @param {number} ms   - Délai max en millisecondes avant annulation
+     * @returns {Promise<Response>}
+     */
     function fetchWithTimeout(url, ms) {
       const controller = new AbortController();
       const id = setTimeout(() => controller.abort(), ms);
       return fetch(url, { signal: controller.signal, cache: 'no-cache' }).finally(() => clearTimeout(id));
     }
 
+    /**
+     * Récupère le contenu brut du fichier iCal depuis GitHub raw.
+     * En cas d'échec HTTP ou réseau, lance une Error détaillée.
+     *
+     * @returns {Promise<string>} Contenu texte du fichier .ics
+     */
     async function fetchIcal() {
-      // The site displays the agenda file synchronized by the runbook
       let lastError = null;
       try {
         const resp = await fetchWithTimeout(ICAL_URL, 5000);
@@ -638,6 +675,12 @@
       throw new Error(`Impossible de charger ${ICAL_URL}${lastError?.message ? ` (${lastError.message})` : ''}`);
     }
 
+    /**
+     * Retourne le contenu iCal mis en cache dans localStorage s'il est encore valide.
+     * Vérifie que le timestamp de mise en cache est inférieur à CACHE_TTL.
+     *
+     * @returns {string|null} Contenu iCal ou null si absent/expiré
+     */
     function getCachedIcal() {
       try {
         const cached = JSON.parse(localStorage.getItem(CACHE_KEY));
@@ -646,19 +689,39 @@
       return null;
     }
 
+    /**
+     * Sauvegarde le contenu iCal dans localStorage avec le timestamp courant.
+     * Silencieux si localStorage n'est pas disponible (navigation privée...).
+     *
+     * @param {string} data - Contenu texte du fichier .ics
+     */
     function setCachedIcal(data) {
       try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data })); } catch {}
     }
 
-    const FR_MONTHS = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+    // Noms des mois en français (forme courte et longue) pour l'affichage
+    const FR_MONTHS      = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
     const FR_MONTHS_LONG = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
 
-    // Unfold iCal continuation lines (lines starting with space/tab are a continuation of the previous line)
+    /**
+     * Déplie les lignes de continuation iCal (RFC 5545 §3.1).
+     * Une ligne commençant par un espace ou une tabulation est la suite de la ligne précédente.
+     * Normalise également les fins de ligne CRLF → LF.
+     *
+     * @param {string} text - Contenu brut du fichier .ics
+     * @returns {string} Texte avec lignes de continuation supprimées
+     */
     function unfoldIcal(text) {
       return text.replace(/\r\n[ \t]/g, '').replace(/\n[ \t]/g, '').replace(/\r\n/g, '\n');
     }
 
-    // Decode iCal text escape sequences
+    /**
+     * Décode les séquences d'échappement de texte iCal (RFC 5545 §3.3.11).
+     * Gère : \n → saut de ligne, \, → virgule, \; → point-virgule, \\ → backslash.
+     *
+     * @param {string} val - Valeur brute de la propriété iCal
+     * @returns {string} Texte décodé et rogné
+     */
     function icalText(val) {
       return String(val)
         .replace(/\\n/gi, '\n')
@@ -668,7 +731,13 @@
         .trim();
     }
 
-    // Extract property name (before first ';' or ':')
+    /**
+     * Extrait le nom d'une propriété iCal (partie avant le premier ';' ou ':').
+     * Exemple : "DTSTART;TZID=Europe/Paris:20250601T100000" → "DTSTART"
+     *
+     * @param {string} line - Ligne brute du fichier .ics
+     * @returns {string} Nom de propriété en majuscules
+     */
     function icalPropName(line) {
       const end = Math.min(
         line.indexOf(':') >= 0 ? line.indexOf(':') : Infinity,
@@ -677,20 +746,34 @@
       return line.slice(0, end).toUpperCase();
     }
 
-    // Extract property value (after first ':')
+    /**
+     * Extrait la valeur d'une propriété iCal (partie après le premier ':').
+     * Exemple : "SUMMARY:Kermesse 2025" → "Kermesse 2025"
+     *
+     * @param {string} line - Ligne brute du fichier .ics
+     * @returns {string} Valeur de la propriété (ou chaîne vide si ':' absent)
+     */
     function icalPropValue(line) {
       const idx = line.indexOf(':');
       return idx >= 0 ? line.slice(idx + 1) : '';
     }
 
-    // Parse a DTSTART line into a JS Date
+    /**
+     * Parse une ligne DTSTART ou DTEND en un objet Date JavaScript.
+     * Supporte les formats DATE (YYYYMMDD) et DATE-TIME (YYYYMMDDTHHmmssZ).
+     * - Si la valeur se termine par 'Z', interprétée en UTC.
+     * - Sinon, interprétée en heure locale.
+     *
+     * @param {string} line - Ligne DTSTART ou DTEND du fichier .ics
+     * @returns {Date} Date parsée
+     */
     function parseIcalDate(line) {
       const val = icalPropValue(line).trim();
       const y  = parseInt(val.slice(0, 4), 10);
       const mo = parseInt(val.slice(4, 6), 10) - 1;
       const d  = parseInt(val.slice(6, 8), 10);
       if (val.length === 8 || val.indexOf('T') < 0) {
-        // DATE-only: treat as local midnight
+        // Format DATE uniquement : interprétation à minuit heure locale
         return new Date(y, mo, d);
       }
       const h  = parseInt(val.slice(9, 11), 10);
@@ -698,11 +781,24 @@
       return val.endsWith('Z') ? new Date(Date.UTC(y, mo, d, h, mi)) : new Date(y, mo, d, h, mi);
     }
 
-    // Parse iCal text and return an array of event objects
+    /**
+     * Parse un contenu iCal complet et retourne la liste des événements trouvés.
+     * Chaque événement est un objet avec les propriétés :
+     *   - title      {string}  Titre de l'événement (SUMMARY)
+     *   - date       {Date}    Date de début (DTSTART)
+     *   - dateEnd    {Date}    Date de fin (DTEND), optionnel
+     *   - location   {string}  Lieu (LOCATION), optionnel
+     *   - description{string}  Description (DESCRIPTION), optionnel
+     *   - category   {string}  Première catégorie (CATEGORIES), optionnel
+     * Les événements sans SUMMARY ou DTSTART sont ignorés.
+     *
+     * @param {string} text - Contenu brut du fichier .ics
+     * @returns {Array<Object>} Tableau d'objets événement
+     */
     function parseIcal(text) {
       const events = [];
       const blocks = unfoldIcal(text).split('BEGIN:VEVENT');
-      blocks.shift(); // discard the VCALENDAR header
+      blocks.shift(); // Ignore l'en-tête VCALENDAR avant le premier VEVENT
       for (const block of blocks) {
         const ev = {};
         for (const line of block.split('\n')) {
@@ -715,11 +811,19 @@
           else if (name === 'DTSTART')     { try { ev.date    = parseIcalDate(line); } catch (e) { console.warn('iCal date invalide :', line, e); } }
           else if (name === 'DTEND')       { try { ev.dateEnd = parseIcalDate(line); } catch (e) { console.warn('iCal DTEND invalide :', line, e); } }
         }
+        // N'inclure que les événements ayant au minimum un titre et une date de début
         if (ev.title && ev.date) events.push(ev);
       }
       return events;
     }
 
+    /**
+     * Échappe les caractères HTML spéciaux pour prévenir les injections XSS
+     * lors de l'insertion de contenu iCal dans le DOM via innerHTML.
+     *
+     * @param {string} str - Chaîne à sécuriser
+     * @returns {string} Chaîne avec &, <, >, " remplacés par leurs entités HTML
+     */
     function escHtml(str) {
       return String(str)
         .replace(/&/g, '&amp;')
@@ -728,13 +832,25 @@
         .replace(/"/g, '&quot;');
     }
 
+    /** Liste de tous les événements à venir (après filtrage et tri). */
     let allEvents = [];
+    /** Clé "année-mois" du filtre actif, ou null si "Tous" est sélectionné. */
     let activeMonthKey = null;
 
+    /**
+     * Génère et insère dans le DOM les cartes d'événements passées en paramètre.
+     * Supprime d'abord les cartes existantes (.event-card) avant d'en créer de nouvelles.
+     * Affiche le message "Aucun événement" si la liste est vide.
+     * Le tout premier événement (index 0) reçoit le badge "Prochain événement"
+     * uniquement si aucun filtre de mois n'est actif.
+     *
+     * @param {Array<Object>} events - Événements à afficher
+     */
     function renderEvents(events) {
       const list  = document.getElementById('eventsList');
       const empty = document.getElementById('eventsEmpty');
 
+      // Suppression des cartes précédemment générées (pas le spinner de chargement)
       list.querySelectorAll('.event-card').forEach(el => el.remove());
 
       if (events.length === 0) {
@@ -749,7 +865,7 @@
       events.forEach((ev, index) => {
         const day = String(ev.date.getDate()).padStart(2, '0');
         const mon = FR_MONTHS[ev.date.getMonth()];
-        // Highlight the very first upcoming event only when no month filter is active
+        // Le badge "Prochain événement" s'affiche uniquement sur le 1er résultat sans filtre
         const isNext = index === 0 && !activeMonthKey;
 
         const article = document.createElement('article');
@@ -770,6 +886,11 @@
       });
     }
 
+    /**
+     * Applique le filtre de mois actif sur allEvents et appelle renderEvents.
+     * - Si activeMonthKey est null, affiche tous les événements.
+     * - Sinon, filtre les événements dont l'année et le mois correspondent.
+     */
     function applyActiveFilter() {
       if (!activeMonthKey) {
         renderEvents(allEvents);
@@ -781,11 +902,17 @@
       }
     }
 
+    /**
+     * Construit les boutons de filtre mensuel à partir des événements dans allEvents.
+     * - Cache la barre si tous les événements appartiennent au même mois.
+     * - Crée un bouton "Tous" + un bouton par mois distinct trouvé dans allEvents.
+     * - Met en évidence le bouton correspondant à activeMonthKey.
+     */
     function buildMonthFilters() {
       const container = document.getElementById('monthFilters');
       container.innerHTML = '';
 
-      // Collect unique year-month keys in order
+      // Collecte les couples (clé, libellé) de chaque mois présent dans les événements
       const months = new Map();
       allEvents.forEach(ev => {
         const key = `${ev.date.getFullYear()}-${ev.date.getMonth()}`;
@@ -794,6 +921,7 @@
         }
       });
 
+      // Pas de barre de filtres si tous les événements sont dans le même mois
       if (months.size <= 1) {
         container.style.display = 'none';
         return;
@@ -801,12 +929,14 @@
 
       container.style.display = 'flex';
 
+      // Bouton "Tous" (réinitialise le filtre)
       const allBtn = document.createElement('button');
       allBtn.className = 'month-btn' + (activeMonthKey === null ? ' month-btn--active' : '');
       allBtn.textContent = 'Tous';
       allBtn.dataset.month = '';
       container.appendChild(allBtn);
 
+      // Un bouton par mois distinct, dans l'ordre chronologique
       months.forEach((label, key) => {
         const btn = document.createElement('button');
         btn.className = 'month-btn' + (activeMonthKey === key ? ' month-btn--active' : '');
@@ -816,6 +946,11 @@
       });
     }
 
+    /**
+     * Affiche un message d'erreur dans la section agenda avec un bouton "Réessayer".
+     * Appelée uniquement quand le chargement réseau a échoué ET qu'aucun cache n'est disponible.
+     * Le bouton relance loadAndRenderEvents() après avoir réaffiché le spinner.
+     */
     function showRetryButton() {
       const empty = document.getElementById('eventsEmpty');
       empty.textContent = 'Impossible de charger les événements. ';
@@ -838,13 +973,23 @@
       });
     }
 
+    /**
+     * Fonction principale d'initialisation de la section agenda.
+     * Séquence d'exécution :
+     *  1. Charge la configuration du site (config.json) pour connaître maxEvents.
+     *  2. Si un cache local valide existe, affiche immédiatement les données cachées.
+     *  3. En parallèle (ou après si pas de cache), charge le flux iCal depuis GitHub raw.
+     *  4. Met à jour l'affichage avec les données fraîches et rafraîchit le cache.
+     *  5. En cas d'erreur réseau sans cache disponible, affiche le bouton "Réessayer".
+     *  6. Si une erreur survient mais que le cache était disponible, conserve l'affichage silencieusement.
+     */
     async function loadAndRenderEvents() {
       const loading = document.getElementById('eventsLoading');
 
-      // Load site configuration first (resolves quickly, file is tiny)
+      // Chargement de la config d'abord (fichier minuscule, résout rapidement)
       await loadSiteConfig();
 
-      // Show cached data immediately if available
+      // Affichage immédiat du cache si disponible (améliore la perception de performance)
       const cached = getCachedIcal();
       if (cached) {
         const today = new Date();
@@ -858,10 +1003,10 @@
         applyActiveFilter();
       }
 
-      // Fetch fresh data (in background when cache was available)
+      // Chargement des données fraîches (en arrière-plan si le cache était disponible)
       try {
         const text = await fetchIcal();
-        setCachedIcal(text);
+        setCachedIcal(text); // Mise à jour du cache local
 
         const today = new Date();
         today.setHours(0, 0, 0, 0);
@@ -876,16 +1021,23 @@
       } catch (err) {
         console.error('Erreur chargement calendrier :', err);
         if (!cached) {
+          // Pas de cache disponible → afficher l'erreur avec bouton "Réessayer"
           loading.style.display = 'none';
           showRetryButton();
         }
-        // If we had cached data, keep displaying it silently
+        // Si un cache était disponible, on garde l'affichage actuel sans message d'erreur
       }
     }
 
+    // Lancement initial du chargement de l'agenda
     loadAndRenderEvents();
 
-    // Month filter click handler (delegated, registered once)
+    /**
+     * Gestionnaire de clic délégué sur la barre de filtres mensuelle.
+     * Enregistré une seule fois sur le conteneur parent plutôt que sur chaque bouton.
+     * Lit dataset.month du bouton cliqué pour mettre à jour activeMonthKey
+     * puis relance le rendu filtré.
+     */
     document.getElementById('monthFilters').addEventListener('click', e => {
       const btn = e.target.closest('.month-btn');
       if (!btn) return;

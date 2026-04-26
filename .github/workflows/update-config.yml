@@ -29,7 +29,17 @@ jobs:
 
       - name: Update config.json
         run: |
-          echo '{"maxEvents":${{ inputs.max_events }}}' | python3 -m json.tool --indent 2 > config.json
+          python3 - <<'EOF'
+          import json
+          # Lecture du fichier existant pour préserver les champs non gérés par ce workflow
+          with open('config.json', 'r') as f:
+              cfg = json.load(f)
+          # Mise à jour du seul champ piloté par ce workflow
+          cfg['maxEvents'] = ${{ inputs.max_events }}
+          with open('config.json', 'w') as f:
+              json.dump(cfg, f, indent=2, ensure_ascii=False)
+              f.write('\n')
+          EOF
 
       - name: Commit config if changed
         run: |

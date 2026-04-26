@@ -36,9 +36,12 @@ Le site est une **page unique (SPA-like)** organisée en sections :
 |---|---|---|
 | 🏠 Accueil | `#accueil` | Hero avec présentation et appels à l'action |
 | 🤝 Association | `#association` | Qui sommes-nous, nos valeurs |
+| 📰 Actualités | `#actualites` | Dernières nouvelles de l'association (3–4 fois/an) |
 | 📅 Agenda | `#agenda` | Prochains événements (fichier iCal synchronisé depuis Nextcloud) |
 | 🎉 Activités | `#activites` | Kermesse, spectacles, sorties, collectes |
-| 💰 Les fonds | `#fonds` | À quoi servent les fonds collectés |
+| 🖼️ Galerie | `#galerie` | Photos des événements de l'année |
+| 💰 Les fonds | `#fonds` | À quoi servent les fonds collectés + bilan annuel |
+| 🎫 Adhésion | `#adhesion` | Comment rejoindre l'association |
 | ✉️ Contact | `#contact` | Formulaire de contact et coordonnées |
 
 ---
@@ -78,6 +81,7 @@ www-lesamisdemarcel/
 │   └── style.css       # Feuille de style (mobile-first)
 ├── admin/
 │   └── index.html      # Interface d'administration (protégée)
+├── config.json         # Configuration du site (maxEvents, URLs Nextcloud)
 ├── README.md           # Ce fichier
 └── ROADMAP.md          # Évolutions et ajouts de contenu prévus
 ```
@@ -110,11 +114,16 @@ Une interface d'administration est accessible via `/admin/`. Elle est protégée
 |---|---|
 | Nombre d'événements à afficher | Workflow GitHub Actions « Update site config » — sauvegardé dans `config.json` du dépôt |
 
-> **Note :** Le réglage « nombre d'événements » est stocké dans le fichier `config.json` versionné dans le dépôt Git.
-> Pour le modifier, déclenchez le workflow **« Update site config »** depuis
+> **Note :** Le fichier `config.json` est versionné dans le dépôt Git. Il contient :
+> - `maxEvents` — nombre d'événements à afficher (1–10)
+> - `calendarViewUrl` — lien public vers le calendrier Nextcloud (affichage)
+> - `calendarIcalUrl` — lien iCal utilisé par la synchronisation GitHub Actions
+>
+> Pour modifier `maxEvents`, déclenchez le workflow **« Update site config »** depuis
 > [GitHub Actions](https://github.com/lepekinoi/www-lesamisdemarcel/actions/workflows/update-config.yml)
 > (bouton *Run workflow*, choix de la valeur 1–10). Le changement est effectif sur tous les navigateurs
 > dès le prochain chargement du site.
+> Les autres champs (`calendarViewUrl`, `calendarIcalUrl`) sont fixes et modifiables directement dans le fichier.
 
 ---
 

@@ -246,33 +246,57 @@
 
   <script>
     // ---- Configuration ----
+    /** Mot de passe d'accès à l'interface d'administration. */
     const ADMIN_PASSWORD = 'amisdemarcel';
+    /** Clé de sessionStorage indiquant qu'une session admin est active. */
     const SESSION_KEY    = 'lam_admin_session';
 
-    // ---- Elements ----
-    const loginScreen = document.getElementById('loginScreen');
-    const adminShell  = document.getElementById('adminShell');
-    const loginForm   = document.getElementById('loginForm');
-    const loginError  = document.getElementById('loginError');
-    const logoutBtn   = document.getElementById('logoutBtn');
+    // ---- Références aux éléments du DOM ----
+    const loginScreen = document.getElementById('loginScreen'); // Écran de connexion
+    const adminShell  = document.getElementById('adminShell');  // Interface admin (masquée par défaut)
+    const loginForm   = document.getElementById('loginForm');   // Formulaire de connexion
+    const loginError  = document.getElementById('loginError');  // Message d'erreur de connexion
+    const logoutBtn   = document.getElementById('logoutBtn');   // Bouton de déconnexion
 
-    // ---- Session ----
+    // ---- Gestion de la session ----
+
+    /**
+     * Vérifie si une session admin est active (stockée dans sessionStorage).
+     * La session est limitée à l'onglet courant et disparaît à la fermeture du navigateur.
+     *
+     * @returns {boolean} true si l'utilisateur est connecté
+     */
     function isLoggedIn() {
       return sessionStorage.getItem(SESSION_KEY) === '1';
     }
 
+    /**
+     * Affiche l'interface d'administration et masque l'écran de connexion.
+     * Appelée après une authentification réussie ou si une session existe déjà.
+     */
     function showAdmin() {
       loginScreen.style.display = 'none';
       adminShell.classList.add('visible');
     }
 
+    /**
+     * Affiche l'écran de connexion et masque l'interface d'administration.
+     * Appelée lors de la déconnexion.
+     */
     function showLogin() {
       adminShell.classList.remove('visible');
       loginScreen.style.display = '';
     }
 
+    // Restauration automatique de la session si elle est encore active
     if (isLoggedIn()) { showAdmin(); }
 
+    /**
+     * Gestionnaire de soumission du formulaire de connexion.
+     * Compare le mot de passe saisi avec ADMIN_PASSWORD.
+     * - Si correct : enregistre la session et affiche l'interface admin.
+     * - Si incorrect : affiche un message d'erreur et vide le champ mot de passe.
+     */
     loginForm.addEventListener('submit', e => {
       e.preventDefault();
       const pwd = document.getElementById('loginPassword').value;
@@ -287,6 +311,10 @@
       }
     });
 
+    /**
+     * Gestionnaire du bouton de déconnexion.
+     * Supprime la session de sessionStorage et revient à l'écran de connexion.
+     */
     logoutBtn.addEventListener('click', () => {
       sessionStorage.removeItem(SESSION_KEY);
       showLogin();

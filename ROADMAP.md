@@ -17,52 +17,30 @@ Propositions d'évolutions de contenu pour enrichir le site, informer les famill
 - [x] Synchronisation automatique de l'agenda Nextcloud via GitHub Actions (toutes les 30 min)
 - [x] Rechargement sans cache HTTP des événements (`cache: 'no-cache'`) — les titres modifiés dans Nextcloud sont toujours affichés immédiatement
 - [x] Réglage « nombre d'événements à afficher » (1 à 10) dans l'interface d'administration
+- [x] Section "Actualités" (3 dernières nouvelles de l'association, mises à jour 3–4 fois/an)
+- [x] Galerie photos — 6 emplacements avec placeholders, prêts pour des photos Nextcloud
+- [x] Bilan annuel — tableau des recettes et reversements par année scolaire
+- [x] Section "Adhésion" — tarif, avantages, lien HelloAsso et formulaire de contact
+- [x] URLs de l'agenda Nextcloud centralisées dans `config.json` (`calendarViewUrl`, `calendarIcalUrl`)
+- [x] Code JavaScript commenté (JSDoc) sur toutes les fonctions du site et de l'admin
 
 ---
 
 ## 🚀 Évolutions prioritaires
 
-### 1. 📸 Galerie photos / souvenirs
+### 1. 📸 Galerie photos — remplacement des placeholders
 
-Ajouter une **petite galerie de photos** (4 à 8 photos) illustrant les événements de l'année :
+Remplacer les 6 placeholders emoji par de vraies photos hébergées sur Nextcloud :
 
-- Kermesse, fête de fin d'année, sorties scolaires…
-- Intégrée comme une nouvelle section légère entre "Activités" et "Les fonds"
-- Photos hébergées sur le Nextcloud de l'association
-- Mise à jour simple chaque année
-
----
-
-### 2. 📝 Section "Actualités"
-
-Une section courte avec **2 ou 3 actualités récentes** de l'association :
-
-- Résultats d'une collecte (ex. : "Merci, nous avons récolté 1 200 € !")
-- Annonce d'un partenariat ou d'un projet soutenu
-- Message de rentrée ou de fin d'année
-- Renouvelée 3 à 4 fois par an — sans nécessiter de CMS complexe
+- Modifier chaque `<div class="galerie-placeholder">` par une balise `<img>` avec l'URL Nextcloud
+- Format recommandé : WebP ou JPEG, ratio 4/3, ~800 px de large
+- Attribut `loading="lazy"` pour les performances
 
 ---
 
-### 3. 📄 Page / section "Adhésion"
+### 2. 📝 Section "Actualités" — mise à jour régulière
 
-Informer clairement sur **comment rejoindre l'association** :
-
-- Montant de la cotisation annuelle
-- Ce que cela donne accès à (vote en AG, participation aux événements…)
-- Formulaire d'adhésion en ligne (ou PDF téléchargeable)
-- Lien vers un bulletin d'adhésion numérique simple (ex. : HelloAsso)
-
----
-
-### 4. 🏆 Bilan annuel / transparence financière
-
-Partager un **résumé annuel des actions** de l'association :
-
-- Montants collectés et reversés à l'école
-- Projets financés (matériel, sorties, classes découvertes…)
-- Format léger : une infographie ou un tableau HTML simple
-- Publié chaque fin d'année scolaire (juin)
+La section est en place. La mettre à jour 3–4 fois par an directement dans `index.html` :
 
 ---
 
@@ -96,6 +74,9 @@ Si l'association crée une page Facebook ou Instagram :
 | Ajout d'un favicon | 🟡 Moyenne | ✅ Fait |
 | Politique de confidentialité (RGPD) si formulaire fonctionnel | 🔴 Haute | ✅ Fait |
 | Rechargement sans cache HTTP du fichier iCal (`cache: 'no-cache'`) | 🔴 Haute | ✅ Fait |
+| Commentaires JSDoc sur toutes les fonctions JS | 🟡 Moyenne | ✅ Fait |
+| URLs Nextcloud centralisées dans `config.json` | 🟡 Moyenne | ✅ Fait |
+| Suppression du CSS mort (règles `.join*` inutilisées) | 🟢 Basse | ✅ Fait |
 | Optimisation des images (format WebP, lazy loading) | 🟢 Basse | ⏳ À faire |
 
 ---
