@@ -104,6 +104,18 @@ Puis ouvrir [http://localhost:8080](http://localhost:8080).
 
 Une interface d'administration est accessible via `/admin/`. Elle est protégée par mot de passe et permet de gérer les contenus du site.
 
+### Réglages disponibles
+
+| Réglage | Description |
+|---|---|
+| Nombre d'événements à afficher | Workflow GitHub Actions « Update site config » — sauvegardé dans `config.json` du dépôt |
+
+> **Note :** Le réglage « nombre d'événements » est stocké dans le fichier `config.json` versionné dans le dépôt Git.
+> Pour le modifier, déclenchez le workflow **« Update site config »** depuis
+> [GitHub Actions](https://github.com/lepekinoi/www-lesamisdemarcel/actions/workflows/update-config.yml)
+> (bouton *Run workflow*, choix de la valeur 1–10). Le changement est effectif sur tous les navigateurs
+> dès le prochain chargement du site.
+
 ---
 
 ## 📬 Contact

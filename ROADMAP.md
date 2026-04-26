@@ -14,6 +14,9 @@ Propositions d'évolutions de contenu pour enrichir le site, informer les famill
 - [x] Section "Les fonds" — à quoi servent les fonds collectés
 - [x] Formulaire de contact
 - [x] Interface d'administration
+- [x] Synchronisation automatique de l'agenda Nextcloud via GitHub Actions (toutes les 30 min)
+- [x] Rechargement sans cache HTTP des événements (`cache: 'no-cache'`) — les titres modifiés dans Nextcloud sont toujours affichés immédiatement
+- [x] Réglage « nombre d'événements à afficher » (1 à 10) dans l'interface d'administration
 
 ---
 
@@ -86,13 +89,14 @@ Si l'association crée une page Facebook ou Instagram :
 
 ## 🔧 Améliorations techniques
 
-| Amélioration | Priorité |
-|---|---|
-| Soumission du formulaire de contact fonctionnelle (Formspree, Netlify…) | 🔴 Haute |
-| Ajout de balises Open Graph pour un meilleur partage sur les réseaux | 🟡 Moyenne |
-| Ajout d'un favicon | 🟡 Moyenne |
-| Politique de confidentialité (RGPD) si formulaire fonctionnel | 🔴 Haute |
-| Optimisation des images (format WebP, lazy loading) | 🟢 Basse |
+| Amélioration | Priorité | Statut |
+|---|---|---|
+| Soumission du formulaire de contact fonctionnelle (Formspree, Netlify…) | 🔴 Haute | ⏳ À faire |
+| Ajout de balises Open Graph pour un meilleur partage sur les réseaux | 🟡 Moyenne | ✅ Fait |
+| Ajout d'un favicon | 🟡 Moyenne | ✅ Fait |
+| Politique de confidentialité (RGPD) si formulaire fonctionnel | 🔴 Haute | ✅ Fait |
+| Rechargement sans cache HTTP du fichier iCal (`cache: 'no-cache'`) | 🔴 Haute | ✅ Fait |
+| Optimisation des images (format WebP, lazy loading) | 🟢 Basse | ⏳ À faire |
 
 ---
 

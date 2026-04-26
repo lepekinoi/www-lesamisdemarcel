@@ -221,6 +221,25 @@
            class="btn btn-success">🗓 Ouvrir Nextcloud Calendar</a>
       </div>
 
+      <!-- Display settings -->
+      <div class="card">
+        <h2>⚙️ Paramètres d'affichage</h2>
+        <p style="margin-bottom:1rem;">
+          Les paramètres de fonctionnement du site sont stockés dans le fichier
+          <code>config.json</code> du dépôt Git. Pour les modifier, déclenchez le workflow
+          <strong>« Update site config »</strong> directement depuis GitHub Actions :
+        </p>
+        <a href="https://github.com/lepekinoi/www-lesamisdemarcel/actions/workflows/update-config.yml"
+           target="_blank" rel="noopener" class="btn btn-primary">
+          ⚙️ Modifier config.json via GitHub Actions
+        </a>
+        <p style="margin-top:.75rem; font-size:.85rem; color:var(--muted);">
+          Cliquez sur <em>« Run workflow »</em>, choisissez le nombre d'événements à afficher (1–10),
+          puis validez. Le fichier <code>config.json</code> est mis à jour et le site en tient compte
+          automatiquement dès le prochain chargement.
+        </p>
+      </div>
+
     </main>
   </div>
 
