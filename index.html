@@ -595,11 +595,24 @@
     const LOCAL_ICAL  = 'agendas/calendar.ics';
     const CACHE_KEY = 'lam_ical_cache';
     const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
-    const MAX_EVENTS_KEY = 'lam_max_events';
 
-    function getMaxEvents() {
-      const v = parseInt(localStorage.getItem(MAX_EVENTS_KEY), 10);
-      return (v >= 1 && v <= 10) ? v : 5;
+    // Site configuration loaded from config.json (versioned in the repository)
+    const MIN_EVENTS = 1;
+    const MAX_EVENTS = 10;
+    let siteConfig = { maxEvents: 5 };
+
+    async function loadSiteConfig() {
+      try {
+        const resp = await fetchWithTimeout('config.json', 5000);
+        if (resp.ok) {
+          const data = await resp.json();
+          if (data && typeof data.maxEvents === 'number' && data.maxEvents >= MIN_EVENTS && data.maxEvents <= MAX_EVENTS) {
+            siteConfig.maxEvents = data.maxEvents;
+          }
+        }
+      } catch (e) {
+        console.warn('Impossible de charger config.json, valeurs par défaut utilisées :', e);
+      }
     }
 
     // Wrapper around fetch with a manual AbortController-based timeout (large browser support)
@@ -827,6 +840,9 @@
     async function loadAndRenderEvents() {
       const loading = document.getElementById('eventsLoading');
 
+      // Load site configuration first (resolves quickly, file is tiny)
+      await loadSiteConfig();
+
       // Show cached data immediately if available
       const cached = getCachedIcal();
       if (cached) {
@@ -835,7 +851,7 @@
         allEvents = parseIcal(cached)
           .filter(e => e.dateEnd ? e.dateEnd > today : e.date >= today)
           .sort((a, b) => a.date - b.date)
-          .slice(0, getMaxEvents());
+          .slice(0, siteConfig.maxEvents);
         loading.style.display = 'none';
         buildMonthFilters();
         applyActiveFilter();
@@ -851,7 +867,7 @@
         allEvents = parseIcal(text)
           .filter(e => e.dateEnd ? e.dateEnd > today : e.date >= today)
           .sort((a, b) => a.date - b.date)
-          .slice(0, getMaxEvents());
+          .slice(0, siteConfig.maxEvents);
 
         loading.style.display = 'none';
         buildMonthFilters();

@@ -224,26 +224,19 @@
       <!-- Display settings -->
       <div class="card">
         <h2>⚙️ Paramètres d'affichage</h2>
-        <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
-          <label for="maxEventsSelect" style="font-weight:700; color:var(--dark);">
-            Nombre d'événements à afficher sur le site&nbsp;:
-          </label>
-          <select id="maxEventsSelect" style="padding:.45rem .9rem; border:1.5px solid var(--border); border-radius:var(--radius); font-family:inherit; font-size:.95rem; color:var(--text); background:var(--white); cursor:pointer;">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-          </select>
-          <span id="maxEventsSaved" style="color:var(--success); font-size:.85rem; display:none;">✔ Enregistré</span>
-        </div>
+        <p style="margin-bottom:1rem;">
+          Les paramètres de fonctionnement du site sont stockés dans le fichier
+          <code>config.json</code> du dépôt Git. Pour les modifier, déclenchez le workflow
+          <strong>« Update site config »</strong> directement depuis GitHub Actions :
+        </p>
+        <a href="https://github.com/lepekinoi/www-lesamisdemarcel/actions/workflows/update-config.yml"
+           target="_blank" rel="noopener" class="btn btn-primary">
+          ⚙️ Modifier config.json via GitHub Actions
+        </a>
         <p style="margin-top:.75rem; font-size:.85rem; color:var(--muted);">
-          Ce réglage est sauvegardé dans le navigateur et pris en compte au prochain chargement du site public.
+          Cliquez sur <em>« Run workflow »</em>, choisissez le nombre d'événements à afficher (1–10),
+          puis validez. Le fichier <code>config.json</code> est mis à jour et le site en tient compte
+          automatiquement dès le prochain chargement.
         </p>
       </div>
 
@@ -298,24 +291,6 @@
       sessionStorage.removeItem(SESSION_KEY);
       showLogin();
     });
-
-    // ---- Max events setting ----
-    const MAX_EVENTS_KEY = 'lam_max_events';
-    const maxEventsSelect = document.getElementById('maxEventsSelect');
-    const maxEventsSaved  = document.getElementById('maxEventsSaved');
-
-    function loadMaxEventsSetting() {
-      const v = parseInt(localStorage.getItem(MAX_EVENTS_KEY), 10);
-      maxEventsSelect.value = (v >= 1 && v <= 10) ? String(v) : '5';
-    }
-
-    maxEventsSelect.addEventListener('change', () => {
-      localStorage.setItem(MAX_EVENTS_KEY, maxEventsSelect.value);
-      maxEventsSaved.style.display = 'inline';
-      setTimeout(() => { maxEventsSaved.style.display = 'none'; }, 2000);
-    });
-
-    loadMaxEventsSetting();
   </script>
 
 </body>

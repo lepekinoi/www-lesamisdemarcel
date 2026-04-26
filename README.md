@@ -108,9 +108,13 @@ Une interface d'administration est accessible via `/admin/`. Elle est protégée
 
 | Réglage | Description |
 |---|---|
-| Nombre d'événements à afficher | Liste déroulante (1 à 10) — sauvegardé dans le navigateur de l'administrateur |
+| Nombre d'événements à afficher | Workflow GitHub Actions « Update site config » — sauvegardé dans `config.json` du dépôt |
 
-> **Note :** Le réglage « nombre d'événements » est stocké dans le `localStorage` du navigateur de l'administrateur et pris en compte au prochain chargement (ou rechargement) de la page d'accueil du site dans ce même navigateur.
+> **Note :** Le réglage « nombre d'événements » est stocké dans le fichier `config.json` versionné dans le dépôt Git.
+> Pour le modifier, déclenchez le workflow **« Update site config »** depuis
+> [GitHub Actions](https://github.com/lepekinoi/www-lesamisdemarcel/actions/workflows/update-config.yml)
+> (bouton *Run workflow*, choix de la valeur 1–10). Le changement est effectif sur tous les navigateurs
+> dès le prochain chargement du site.
 
 ---
 
