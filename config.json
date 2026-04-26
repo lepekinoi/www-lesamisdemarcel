@@ -1,3 +1,5 @@
 {
-  "maxEvents": 5
+  "maxEvents": 5,
+  "calendarViewUrl": "https://nxtcld.lesamisdemarcel.fr/apps/calendar/p/yFFj9TrYN2R8oCkT",
+  "calendarIcalUrl": "https://nxtcld.lesamisdemarcel.fr/remote.php/dav/public-calendars/yFFj9TrYN2R8oCkT?export"
 }
